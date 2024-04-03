@@ -8,6 +8,18 @@
         <servlet-name>leaveServlet</servlet-name>
         <servlet-class>Controller.leaveServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>productsServlet</servlet-name>
+        <servlet-class>Controller.productsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>customersServlet</servlet-name>
+        <servlet-class>Controller.customersServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>suppliersServlet</servlet-name>
+        <servlet-class>Controller.suppliersServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>employeeServlet</servlet-name>
         <url-pattern>/employeeServlet</url-pattern>
@@ -15,6 +27,18 @@
     <servlet-mapping>
         <servlet-name>leaveServlet</servlet-name>
         <url-pattern>/leaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>productsServlet</servlet-name>
+        <url-pattern>/productsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>customersServlet</servlet-name>
+        <url-pattern>/customersServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>suppliersServlet</servlet-name>
+        <url-pattern>/suppliersServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

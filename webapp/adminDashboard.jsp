@@ -1,6 +1,6 @@
 <%-- 
-    Document   : managerDashboard
-    Created on : 22 Dec 2023, 8:47:36 pm
+    Document   : adminDashboard
+    Created on : 23 Jan 2024, 9:51:57 am
     Author     : A S U S
 --%>
 
@@ -75,7 +75,7 @@
 
             <body>
                 <jsp:include page="header.jsp"/>
-                <jsp:include page="managerNavBar.jsp"/>
+                <jsp:include page="adminNavBar.jsp"/>
 
                 <br>
                 <div class="container">
@@ -171,6 +171,17 @@
                     </div>
 
 
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body custom-color">
+                                <h5 class="card-title">Inventory</h5>
+                                <i class="fas fa-archive fa-lg icon-center" style="color: #cccc00;"></i>
+                                <!-- Customers content goes here -->
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
             <br><br>
@@ -184,5 +195,3 @@
         </body>
 
     </html>
-
-

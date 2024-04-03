@@ -3,7 +3,6 @@
     Created on : 5 Jan 2024, 2:57:13 am
     Author     : A S U S
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page session="true" %>
@@ -19,79 +18,87 @@
 
         <jsp:include page="bootstrap.jsp"/>
 
-  <style>
-        body {
-            background-color: #f8f9fa;
-        }
+        <style>
+            body {
+                background-color: #f8f9fa;
+            }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #ffffff;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+                border-radius: 10px;
+            }
 
-        h2 {
-            text-align: center;
-        }
+            h2 {
+                text-align: center;
+            }
 
-        label {
-            font-weight: bold;
-        }
+            label {
+                font-weight: bold;
+            }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+            .form-group {
+                margin-bottom: 20px;
+            }
 
-        input[type="text"],
-        input[type="password"],
-        input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #f8f9fa;
-        }
+            input[type="text"],
+            input[type="password"],
+            input[type="email"] {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+                font-size: 16px;
+                background-color: #f8f9fa;
+            }
 
-        .btn-success {
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+            .btn-success {
+                background-color: #007bff;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
 
-        .btn-success:hover {
-            background-color: #0056b3;
-        }
+            .btn-success:hover {
+                background-color: #0056b3;
+            }
 
-        /* Additional styling for form elements */
-        .card {
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-        }
+            /* Additional styling for form elements */
+            .card {
+                border: none;
+                box-shadow: none;
+                border-radius: 0;
+            }
 
-        .card-body {
-            padding: 30px;
-        }
+            .card-body {
+                padding: 30px;
+            }
 
-        /* Optional: Add custom styling for specific elements */
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-    </style>
+            /* Optional: Add custom styling for specific elements */
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="header.jsp"/>
-        <% String data= (String) session.getAttribute("supID"); %>
+        <% String data= (String) session.getAttribute("username"); %>
+        <%
+       String role= (String) session.getAttribute("role");
+        %>
+
+        <% if ("manager".equals(role)) { %>
         <jsp:include page="managerNavBar.jsp"/>
+        <% } else { %>
+        <jsp:include page="clerkNavBar.jsp"/>
+        <% } %>
         <br><br>
         <div class="container col-md-5">
             <div class="">
@@ -125,13 +132,8 @@
 
 
                             <fieldset class="form-group">
-                                <label>First Name</label>
-                                <input type="text" value="<c:out value='${suppliers.firstName}'/>" class="form-control" name="firstName" required="required"><!-- comment -->
-                            </fieldset>
-
-                            <fieldset class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" value="<c:out value='${suppliers.lastName}'/>" class="form-control" name="lastName" required="required"><!-- comment -->
+                                <label>Supplier Name</label>
+                                <input type="text" value="<c:out value='${suppliers.supName}'/>" class="form-control" name="supName" required="required"><!-- comment -->
                             </fieldset>
 
                             <fieldset class="form-group">
@@ -144,21 +146,6 @@
                                 <input type="email" value="<c:out value='${suppliers.email}'/>" class="form-control" name="email" required="required"><!-- comment -->
                             </fieldset>
 
-                            <fieldset class="form-group">
-                                <label>Address</label>
-                                <input type="text" value="<c:out value='${suppliers.address}'/>" class="form-control" name="address" required="required"><!-- comment -->
-                            </fieldset>
-
-                            <c:if test="${suppliers != null}">
-                                <input type="hidden" name="password" value="<c:out value='${suppliers.password}'/>" />
-                            </c:if>
-
-                            <c:if test="${suppliers == null}">
-                                <fieldset class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" value="<c:out value='${suppliers.password}'/>" class="form-control" name="password" required="required"><!-- comment -->
-                                </c:if>
-                            </fieldset>
 
                             <button type="submit" class="btn btn-success">Save</button>
                         </form>

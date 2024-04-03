@@ -1,6 +1,6 @@
 <%-- 
-    Document   : managerNavBar
-    Created on : 22 Dec 2023, 6:28:35 pm
+    Document   : staffNavBar
+    Created on : 23 Jan 2024, 12:25:04 am
     Author     : A S U S
 --%>
 
@@ -20,7 +20,7 @@
         
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <!-- Add a Navbar Brand -->
-            <h3 style="color: white"><a href="userDetails.jsp" style="color: white">Clerk</a>, <%= fname %></h3>
+            <h3 style="color: white"><a href="userDetails.jsp" style="color: white">Staff</a>, <%= fname %></h3>
             <!-- Add a Navbar Toggler   -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,28 +30,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto"> <!-- Change to ml-auto for right alignment on larger screens -->
                     <li class="nav-item <%= (request.getRequestURI().endsWith("managerDashboard.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="managerDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="staffDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item <%= (request.getRequestURI().endsWith("attendancesList.jsp")) ? "active" : "" %>">
                         <a class="nav-link" href="attendancesList.jsp">Attendances <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("customersServlet?action=custlist")) ? "active" : "" %>">
-                        <a class="nav-link" href="customersServlet?action=custlist">Customers <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("salesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="salesList.jsp">Sales <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("suppliersServlet?action=suplist")) ? "active" : "" %>">
-                        <a class="nav-link" href="suppliersServlet?action=suplist">Suppliers <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("expensesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="expensesList.jsp">Expenses <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("productsList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="productsList.jsp">Products <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("inventory.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="inventory.jsp">Inventory <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="loginPage.jsp">Log Out</a>
@@ -66,3 +48,4 @@
         <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>
+

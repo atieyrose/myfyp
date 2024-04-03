@@ -72,6 +72,7 @@
                                         if (rs.next()) {
                                         
                                         String role = rs.getString("role");
+                                        session.setAttribute("role", role);
             
                                         if ("manager".equals(role)) {
                                         String fname = rs.getString("firstName");
@@ -85,27 +86,35 @@
                                         session.setAttribute("firstName", fname);
                                         response.sendRedirect("clerkDashboard.jsp");
             
-                                        } else {
-                                        // If validation is unsuccessful for both employee and manager, redirect to login.jsp with error message
-                                        response.sendRedirect("loginPage.jsp?error=1");
+                                        } else if ("staff".equals(role)) {
+                                        String fname = rs.getString("firstName");
+                                        session.setAttribute("username", username);
+                                        session.setAttribute("firstName", fname);
+                                        response.sendRedirect("staffDashboard.jsp");
             
+                                        } else {
+                                        String fname = rs.getString("firstName");
+                                        session.setAttribute("username", username);
+                                        session.setAttribute("firstName", fname);
+                                        response.sendRedirect("adminDashboard.jsp");
                                         }
-                                        }
-                                        cn.close();
-                                        } catch (ClassNotFoundException | SQLException e) {
-                                        e.printStackTrace();
-                                        response.sendRedirect("loginPage.jsp");
-                                        } 
-                                        }
+                                        } else { 
+                                        // User authentication failed, display an error message %>
+                                    <p class='text-danger'>Incorrect username or password.</p> 
+                                    <%
+                                    }
+                                    cn.close();
+                                    } catch (ClassNotFoundException | SQLException e) {
+                                    e.printStackTrace();
+                                    response.sendRedirect("loginPage.jsp");
+                                    } 
+                                    }
                                         
-                                        session.setAttribute("username", request.getParameter("username"));
+                                        
+                                    session.setAttribute("username", request.getParameter("username"));
                                     %>
 
                                     <div class="d-flex mb-5 align-items-center">
-                                        <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
-                                            <input type="checkbox" checked="checked"/>
-                                            <div class="control__indicator"></div>
-                                        </label>
                                         <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
                                     </div>
 

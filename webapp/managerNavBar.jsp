@@ -13,70 +13,70 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <jsp:include page="bootstrap.jsp"/>
-    </head>
-    <body>
+        <% String fname= (String) session.getAttribute("firstName"); %>
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Manager</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <style>
+            /* Custom Navbar Styles */
+            .custom-navbar {
+                background-color: #333333; /* Dark Black Background Color */
+                height: 80px;
+            }
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("managerDashboard.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="managerDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("employeeServlet?action=list")) ? "active" : "" %>">
-                        <a class="nav-link" href="employeeServlet?action=emplist">Employee <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2  <%= (request.getRequestURI().endsWith("attendancesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="attendancesList.jsp">Attendances <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("leaveList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="leaveList.jsp">Leave <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("customersList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="customersList.jsp">Customers <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("salesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="salesList.jsp">Sales <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("suppliersList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="suppliersList.jsp">Suppliers <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("expensesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="expensesList.jsp">Expenses <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("productsList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="productsList.jsp">Products <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("inventory.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="inventory.jsp">Inventory <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item mx-2 <%= (request.getRequestURI().endsWith("cashflow.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="cashflow.jsp">Cash Flow <span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
+            /* White text color for small screens */
+            @media (max-width: 576px) {
+                .custom-navbar h3 {
+                    color: white;
+                }
+            </style>
+        </head>
+        <body>
 
-            </div>
-        </nav>
 
-   <!--     <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    One of three columns
+            <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+                <!-- Add a Navbar Brand -->
+                <h3 style="color: white"><a href="userDetails.jsp" style="color: white">Manager</a>, <%= fname %></h3>
+                <!-- Add a Navbar Toggler   -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto"> <!-- Change to ml-auto for right alignment on larger screens -->
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("managerDashboard.jsp")) ? "active" : "" %>">
+                            <a class="nav-link" href="managerDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("employeeServlet?action=emplist")) ? "active" : "" %>">
+                            <a class="nav-link" href="employeeServlet?action=emplist">Employee <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("attendancesList.jsp")) ? "active" : "" %>">
+                            <a class="nav-link" href="attendancesList.jsp">Attendances <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("customersServlet?action=custlist")) ? "active" : "" %>">
+                            <a class="nav-link" href="customersServlet?action=custlist">Customers <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("salesList.jsp")) ? "active" : "" %>">
+                            <a class="nav-link" href="salesList.jsp">Sales <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("suppliersServlet?action=suplist")) ? "active" : "" %>">
+                            <a class="nav-link" href="suppliersServlet?action=suplist">Suppliers <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("expensesList.jsp")) ? "active" : "" %>">
+                            <a class="nav-link" href="expensesList.jsp">Expenses <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item <%= (request.getRequestURI().endsWith("productsServlet?action=prodlist")) ? "active" : "" %>">
+                            <a class="nav-link" href="productsServlet?action=prodlist">Products <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="loginPage.jsp">Log Out</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="col-sm-4">
-                    One of three columns
-                </div>
-                <div class="col-sm-4">
-                    One of three columns
-                </div>
-            </div>
-        </div> -->
+            </nav>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    </body>
-</html>
 
+            <!-- Bootstrap JavaScript and jQuery -->
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="bootstrap/js/bootstrap.min.js"></script>
+        </body>
+    </html>

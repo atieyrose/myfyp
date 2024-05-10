@@ -56,7 +56,7 @@
                             <a class="nav-link" href="customersServlet?action=custlist">Customers <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item <%= (request.getRequestURI().endsWith("salesList.jsp")) ? "active" : "" %>">
-                            <a class="nav-link" href="salesList.jsp">Sales <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="processSales.jsp">Sales <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item <%= (request.getRequestURI().endsWith("suppliersServlet?action=suplist")) ? "active" : "" %>">
                             <a class="nav-link" href="suppliersServlet?action=suplist">Suppliers <span class="sr-only">(current)</span></a>

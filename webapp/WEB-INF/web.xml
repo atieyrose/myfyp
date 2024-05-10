@@ -20,6 +20,10 @@
         <servlet-name>suppliersServlet</servlet-name>
         <servlet-class>Controller.suppliersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>salesServlet</servlet-name>
+        <servlet-class>Controller.salesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>employeeServlet</servlet-name>
         <url-pattern>/employeeServlet</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>suppliersServlet</servlet-name>
         <url-pattern>/suppliersServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>salesServlet</servlet-name>
+        <url-pattern>/salesServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

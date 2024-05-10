@@ -355,43 +355,38 @@
                             form.method = "POST";
                             form.action = "processSales.jsp";
 
+                            // Inside saveSales() function in sales.jsp
                             saleItems.forEach(function (item, index) {
                                 var custIDInput = document.createElement("input");
                                 custIDInput.type = "hidden";
                                 custIDInput.name = "custID_" + index;
-                                custIDInput.value = item.custID;
+                                custIDInput.value = item.custID; // Correctly assign custID
+                                form.appendChild(custIDInput);
 
                                 var prodIDInput = document.createElement("input");
                                 prodIDInput.type = "hidden";
                                 prodIDInput.name = "prodID_" + index;
                                 prodIDInput.value = item.prodID;
+                                form.appendChild(prodIDInput);
 
                                 var quantityInput = document.createElement("input");
                                 quantityInput.type = "hidden";
                                 quantityInput.name = "quantity_" + index;
                                 quantityInput.value = item.quantity;
+                                form.appendChild(quantityInput);
 
                                 var amountInput = document.createElement("input");
                                 amountInput.type = "hidden";
                                 amountInput.name = "amount_" + index;
                                 amountInput.value = item.amount;
-
-                                form.appendChild(custIDInput);
-                                form.appendChild(prodIDInput);
-                                form.appendChild(quantityInput);
                                 form.appendChild(amountInput);
                             });
+
 
                             // Append form to the document body and then submit
                             document.body.appendChild(form);
                             form.submit();
                         }
-
-
-
-
-
-
 
 
                     </script>

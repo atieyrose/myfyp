@@ -1,0 +1,17 @@
+DAO\salesDAO.class
+Model\sales.class
+DAO\customersDAO.class
+Controller\customersServlet.class
+Controller\suppliersServlet.class
+com\mycompany\myfyp\JakartaRestConfiguration.class
+DAO\productsDAO.class
+DAO\employeeDAO.class
+Controller\productsServlet.class
+Model\products.class
+Controller\salesServlet.class
+Model\suppliers.class
+Controller\employeeServlet.class
+DAO\suppliersDAO.class
+com\mycompany\myfyp\resources\JakartaEE10Resource.class
+Model\employee.class
+Model\customers.class

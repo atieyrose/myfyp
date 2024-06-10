@@ -1,9 +1,3 @@
-<%-- 
-    Document   : suppliersList
-    Created on : 5 Jan 2024, 3:02:44 am
-    Author     : A S U S
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
@@ -15,20 +9,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard</title>
+        <title>Add New Sale</title>
         <!-- Bootstrap CSS -->
-
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
         <!-- Material Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-        <!--        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">-->
-<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
         <!-- Custom Styles -->
         <link rel="stylesheet" href="css/styles.css">
-         <style>
+        <style>
             body {
                 font-family: 'Montserrat', sans-serif;
             }
@@ -88,6 +78,14 @@
                     padding: 8px;
                 }
             }
+
+            .fieldset-spacing {
+                margin-bottom: 10px; /* Adjust the value as needed */
+            }
+
+            .input-size {
+                width: 1000px; /* Adjust the width as needed */
+            }
         </style>
     </head>
     <body>
@@ -95,159 +93,341 @@
             <!-- Header -->
             <header class="header">
                 <h2>JERNIH TILING ENT</h2>
-                
             </header>
             <!-- End Header -->
 
             <!-- Sidebar -->
             <%
-        String role= (String) session.getAttribute("role");
-        %>
-             <% if ("manager".equals(role)) { %>
-    <jsp:include page="managerNavBar.jsp"/>
-    <% } else { %>
-    <jsp:include page="clerkNavBar.jsp"/>
-    <% } %>
+            String role= (String) session.getAttribute("role");
+            %>
+            <% if ("manager".equals(role)) { %>
+            <jsp:include page="managerNavBar.jsp"/>
+            <% } else { %>
+            <jsp:include page="clerkNavBar.jsp"/>
+            <% } %>
             <!-- End Sidebar -->
 
             <!-- Main -->
             <main class="main-container">
-               <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                    Products List
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Add New Sale
                 </h2>
-            <hr>
-            
-           <% 
-            if ("manager".equals(role) || "clerk".equals(role)) { 
-            %>
-            <a href="productsServlet?action=prodnew" class="btn btn-success float-right">Add New Product</a>
-            <% } else { 
-                } %>
-            <br><br>
-            
-              <div class="container col-md-5">
-            <div class="">
-                <div class="card-body">
-
-                    <c:if test="${employee != null}">
-                        <form action="employeeServlet" method="post">
-                            <input type="hidden" name="action" value="empupdate"><!-- comment -->
-
-                        </c:if>
-
-                        <c:if test="${employee == null}">
-                            <form action="employeeServlet" method="post">
-                                <input type="hidden" name="action" value="empinsert"><!-- comment -->
-
-                            </c:if>
-
-                            <h3>
-                                <c:if test="${employee == null}">
-                                    Add New Employee
-                                </c:if>
-                                <c:if test="${employee != null}">
-                                    Update Employee
-                                </c:if>
-                            </h3>
-                            <br>
-
-                            <c:if test="${employee != null}">
-                                <input type="hidden" name="ID" value="<c:out value='${employee.ID}'/>" />
-                            </c:if>
+                <hr>
 
 
-                            <fieldset class="form-group">
-                                <label>First Name</label>
-                                <input type="text" value="<c:out value='${employee.firstName}'/>" class="form-control" name="firstName" placeholder="Enter First Name" required="required"><!-- comment -->
-                            </fieldset>
 
-                            <fieldset class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" value="<c:out value='${employee.lastName}'/>" class="form-control" name="lastName" placeholder="Enter Last Name" required="required"><!-- comment -->
-                            </fieldset>
+                <div class="container col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <%
+                               Connection cn = null;
+                               PreparedStatement ps = null;
+                               ResultSet rs = null;
+
+                               String url = "jdbc:mysql://localhost:3306/fyp";
+                               String user = "root";
+                               String pass = "admin";
+
+                               try {
+                                   Class.forName("com.mysql.cj.jdbc.Driver");
+                                   cn = DriverManager.getConnection(url, user, pass);
+
+                                   String customerQuery = "SELECT supID, supName FROM suppliers";
+                                   ps = cn.prepareStatement(customerQuery);
+                                   rs = ps.executeQuery();
                             
-                            <fieldset class="form-group">
-                                <label>Card ID</label>
-                                <input type="text" value="<c:out value='${employee.cardID}'/>" class="form-control" name="cardID" placeholder="Enter Card ID"><!-- comment -->
-                            </fieldset>
 
-                            <fieldset class="form-group">
-                                <label>Role</label>
-                                <select class="form-control" name="role" required="required">
-                                    <option value="">Select Role</option><!--  -->
-                                    <c:choose>
-                                        <c:when test="${employee.role eq 'clerk'}">
-                                            <option value="clerk" selected>Clerk</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="clerk">Clerk</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:choose>
-                                        <c:when test="${employee.role eq 'staff'}">
-                                            <option value="staff" selected>Staff</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="staff">Staff</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </select><!-- comment -->
-                            </fieldset>
+                            %>
 
-                            <fieldset class="form-group">
-                                <label>IC Number</label>
-                                <input type="text" value="<c:out value='${employee.icNo}'/>" class="form-control" name="icNo" placeholder="Enter IC Number" required="required"><!-- comment -->
-                            </fieldset>
+                            <form id="expensesCategory">
+                                <label for="expensesCategory">Select expense category:</label>
+                                <select name="expenseCategory" id="expensesCategory">
+                                    <option value="">Select Category</option>
+                                    <option value="raw_materials">Raw Materials</option>
+                                    <option value="utilities">Utilities</option>
+                                    <option value="services">Services</option>
+                                </select>
 
+                            </form>
 
-                            <fieldset class="form-group">
-                                <label>Date Of Birth</label>
-                                <input type="date" value="<c:out value='${employee.DOB}'/>" class="form-control" name="DOB" placeholder="Enter Date Of Birth" required="required"><!-- comment -->
-                            </fieldset>
+                            <form id="expensesForm"  method="post">
+                                <label for="supplierDropdown">Select a Supplier:</label>
+                                <select name="supplierDropdown" id="supplierDropdown">
+                                    <option value="">-- Select a Customer --</option>
+                                    <% while (rs.next()) { %>
+                                    <option value="<%= rs.getInt("supID") %>">
+                                        <%= rs.getString("supName") %>
+                                    </option>
+                                    <% } %>
+                                </select>
+                                <br>
 
+                                <%
+                        
+                                    } catch (SQLException | ClassNotFoundException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        if (rs != null) {
+                                            try {
+                                                rs.close();
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        if (ps != null) {
+                                            try {
+                                                ps.close();
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        if (cn != null) {
+                                            try {
+                                                cn.close();
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                %>
 
+                                <%
+                                    try {
+                                        cn = DriverManager.getConnection(url, user, pass);
+                                        String p = "SELECT prodID, prodName, price FROM products";
+                                        ps = cn.prepareStatement(p);
+                                        rs = ps.executeQuery();
+                                %>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h2 class="h2-title">Add Item</h2>
 
-                            <fieldset class="form-group">
-                                <label>Phone Number</label>
-                                <input type="text" value="<c:out value='${employee.phoneNo}'/>" class="form-control" name="phoneNo" placeholder="Enter Phone Number" required="required"><!-- comment -->
-                            </fieldset>
+                                            <div class="form-group">
+                                                <label for="item" class="mb-2">Item:</label>
+                                                <select id="item" class="form-control" required>
+                                                    <option value="">-- Select an Item --</option>
+                                                    <% while (rs.next()) { %>
+                                                    <option value="<%= rs.getInt("prodID") %>" data-price="<%= rs.getDouble("price") %>">
+                                                        <%= rs.getString("prodName") %>
+                                                    </option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
 
-                            <fieldset class="form-group">
-                                <label>Email</label>
-                                <input type="email" value="<c:out value='${employee.email}'/>" class="form-control" name="email" placeholder="Enter Email" required="required"><!-- comment -->
-                            </fieldset>
+                                            <div class="form-group">
+                                                <label for="price" class="mb-2">Price:</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">$</span>
+                                                    </div>
+                                                    <input type="number" id="price" class="form-control" step="0.01" required readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="quantity" class="mb-2">Quantity:</label>
+                                                <input type="number" id="quantity" class="form-control" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="amount" class="mb-2">Amount:</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">$</span>
+                                                    </div>
+                                                    <input type="number" id="amount" class="form-control" step="0.01" required readonly>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="button" id="expenseSale" class="btn btn-primary">Add Expense</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        <%
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            } finally {
+                                                if (rs != null) {
+                                                    try {
+                                                        rs.close();
+                                                    } catch (SQLException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                if (ps != null) {
+                                                    try {
+                                                        ps.close();
+                                                    } catch (SQLException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                if (cn != null) {
+                                                    try {
+                                                        cn.close();
+                                                    } catch (SQLException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }
+                                        %>
+                                        <div class="col-md-6">
+                                            <h2 class="h2-title">Sale Details</h2>
+                                            <table id="expenseTable" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No.</th>
+                                                        <th>Item</th>
+                                                        <th>ID</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="saleList"></tbody>
+                                            </table>
+                                            <div class="text-center">
+                                                <!--<button type="button" id="saveSales" class="btn btn-success">Save Sales</button>-->
+                                                <button id="calculateButton">Calculate Total</button>
+                                                <div id="totalAmountDisplay"></div>
 
-                            <fieldset class="form-group">
-                                <label>Address</label>
-                                <input type="text" value="<c:out value='${employee.address}'/>" class="form-control" name="address" placeholder="Enter Address" required="required"><!-- comment -->
-                            </fieldset>
+                                                <button type="button" id="saveExpenseBtn"> Save Expenses </button>
 
-                            <c:if test="${employee != null}">
-                                <input type="hidden" name="password" value="<c:out value='${employee.password}'/>" />
-                            </c:if>
-
-                            <c:if test="${employee == null}">
-                                <fieldset class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" value="<c:out value='${employee.password}'/>" class="form-control" name="password" required="required"><!-- comment -->
-                                </c:if>
-                            </fieldset>
-
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
             </main>
-  
-   
-    <br>
- 
-
-  
+        </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            const expenseArray = []; // Declare saleArray outside the event listener
+
+            const expenseList = document.getElementById('expenseList');
+            const expenseTable = document.getElementById('expenseTable');
+
+            document.getElementById('item').addEventListener('change', function () {
+                const selectedItem = this.options[this.selectedIndex];
+                const price = selectedItem.getAttribute('data-price');
+                document.getElementById('price').value = price;
+            });
+
+            document.getElementById('quantity').addEventListener('input', function () {
+                const price = parseFloat(document.getElementById('price').value);
+                const quantity = parseInt(this.value);
+                const amount = price * quantity;
+                document.getElementById('amount').value = amount.toFixed(2);
+            });
+
+            let itemNo = 1;
+            document.getElementById('expenseSale').addEventListener('click', function () {
+                const itemSelect = document.getElementById('item');
+                const itemOption = itemSelect.options[itemSelect.selectedIndex];
+                const item = itemOption.text; // Get the text of the selected option
+                const prodID = itemOption.value; // Get the product ID
+                const price = parseFloat(document.getElementById('price').value);
+                const quantity = parseInt(document.getElementById('quantity').value);
+                const amount = parseFloat(document.getElementById('amount').value);
+                const supID = document.getElementById("supplierDropdown").value; // Retrieve the selected customer ID
+
+                const newRow = expenseTable.insertRow();
+                const cell1 = newRow.insertCell(0);
+                const cell2 = newRow.insertCell(1);
+                const cell3 = newRow.insertCell(2);
+                const cell4 = newRow.insertCell(3);
+                const cell5 = newRow.insertCell(4);
+                const cell6 = newRow.insertCell(5); // Add new cell for prodID
+
+                cell1.textContent = itemNo++;
+                cell2.textContent = item;
+                cell3.textContent = prodID; // Display prodID
+                cell4.textContent = '$' + price.toFixed(2);
+                cell5.textContent = quantity;
+                cell6.textContent = '$' + amount.toFixed(2);
+
+                // Clear the form fields
+                document.getElementById('item').selectedIndex = 0; // Reset item selection
+                document.getElementById('price').value = '';
+                document.getElementById('quantity').value = '';
+                document.getElementById('amount').value = '';
+
+                const expenseItem = {
+                    supID: supID,
+                    prodID: prodID,
+                    item: item,
+                    price: price,
+                    quantity: quantity,
+                    amount: amount
+                };
+
+                // Add saleItem to the saleArray
+                saleArray.push(expenseItem);
+
+            });
+
+            //calculate the total amount of sales
+            document.getElementById('calculateButton').addEventListener('click', function () {
+                // Calculate total amount
+                let totalAmount = 0;
+                saleArray.forEach(function (expenseItem) {
+                    totalAmount += expenseItem.amount;
+                });
+
+                // Display total amount
+                const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+                totalAmountDisplay.textContent = 'Total Amount: $' + totalAmount.toFixed(2);
+
+                // Store totalAmount in session storage
+                sessionStorage.setItem('totalAmount', totalAmount);
+            });
+
+
+
+            document.getElementById('saveExpenseBtn').addEventListener('click', function () {
+                saveExpenses();
+            });
+
+            function saveExpenses() {
+                // Calculate total amount
+                let totalAmount = 0;
+                expenseArray.forEach(function (expenseItem) {
+                    totalAmount += expenseItem.amount;
+                });
+
+                const jsonData = JSON.stringify(expenseArray);
+
+                // Create a hidden input to hold the JSON data
+                const jsonInput = document.createElement("input");
+                jsonInput.type = "hidden";
+                jsonInput.name = "expenseListJSON";
+                jsonInput.value = jsonData;
+
+                // Create a hidden input to hold the totalAmount
+                const totalAmountInput = document.createElement("input");
+                totalAmountInput.type = "hidden";
+                totalAmountInput.name = "totalAmount";
+                totalAmountInput.value = totalAmount;
+
+                // Create a form and append the inputs
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "expensesList.jsp";
+                form.appendChild(jsonInput);
+                form.appendChild(totalAmountInput);
+
+                // Append form to the document body and then submit
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+        </script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
     </body>
 </html>
+

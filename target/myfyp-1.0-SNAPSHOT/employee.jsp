@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard</title>
+        <title>Add New Employee</title>
         <!-- Bootstrap CSS -->
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
@@ -114,10 +114,9 @@
                 </h2>
                 <hr>
 
-                <br><br>
 
                 <div class="container col-md-5">
-                    <div class="card">
+                    <div class="">
                         <div class="card-body">
                             <c:if test="${employee != null}">
                                 <form action="employeeServlet" method="post">
@@ -137,7 +136,7 @@
                                             Update Employee
                                         </c:if>
                                     </h3>
-                                    <br>
+                               
 
                                     <c:if test="${employee != null}">
                                         <input type="hidden" name="ID" value="<c:out value='${employee.ID}'/>" />

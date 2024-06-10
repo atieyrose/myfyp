@@ -6,59 +6,111 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% String fname = (String) session.getAttribute("firstName"); %>
+<style>
+    .sidebar-list-item.active {
+        background-color: #666666;
+        color: #ffffff !important;
+    }
+</style>
+
 <aside id="sidebar">
+    
     <div class="sidebar-title">
         <div class="sidebar-brand">
-            <a href="userDetails.jsp" style="color: #999999">
+            <a href="userDetails.jsp" style="color: #999999; text-decoration: none;">
                 <span class="material-icons-outlined">person</span> Manager</a>, <%= fname %>
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
     </div>
-    <ul class="sidebar-list">
+  <ul class="sidebar-list">
+    <a id="dashboard-link" href="managerDashboard.jsp" style="color: #999999; text-decoration: none;"> 
         <li class="sidebar-list-item">
-            <a href="managerDashboard.jsp">
-                <span class="material-icons-outlined">dashboard</span> Dashboard
-            </a>
+            <span class="material-icons-outlined">dashboard</span> Dashboard
         </li>
+    </a>
+    <a id="employee-link" href="employeeServlet?action=emplist" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="employeeServlet?action=emplist">
-                <span class="material-icons-outlined">person</span> Employee
-            </a>
+            <span class="material-icons-outlined">person</span> Employee
         </li>
+    </a>
+    <a id="attendances-link" href="attendancesList.jsp" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="attendancesList.jsp">
-                <span class="material-icons-outlined">calendar_month</span> Attendances
-            </a>
+            <span class="material-icons-outlined">calendar_month</span> Attendances
         </li>
+    </a>
+    <a id="customers-link" href="customersServlet?action=custlist" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="customersServlet?action=custlist">
-                <span class="material-icons-outlined">groups</span> Customers
-            </a>
+            <span class="material-icons-outlined">groups</span> Customers
         </li>
+    </a>
+    <a id="sales-link" href="processSales.jsp" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="processSales.jsp">
-                <span class="material-icons-outlined">shopping_bag</span> Sales
-            </a>
+            <span class="material-icons-outlined">shopping_bag</span> Sales
         </li>
+    </a>
+    <a id="suppliers-link" href="suppliersServlet?action=suplist" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="suppliersServlet?action=suplist">
-                <span class="material-icons-outlined">groups</span> Suppliers
-            </a>
+            <span class="material-icons-outlined">groups</span> Suppliers
         </li>
+    </a>
+    <a id="expenses-link" href="expensesList.jsp" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="expensesList.jsp">
-                <span class="material-icons-outlined">shopping_cart</span> Expenses
-            </a>
+            <span class="material-icons-outlined">shopping_cart</span> Expenses
         </li>
+    </a>
+    <a id="product-link" href="productsServlet?action=prodlist" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="productsServlet?action=prodlist">
-                <span class="material-icons-outlined">inventory_2</span> Product
-            </a>
+            <span class="material-icons-outlined">inventory_2</span> Product
         </li>
+    </a>
+    <a id="logout-link" href="loginPage.jsp" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
-            <a href="loginPage.jsp">
-                <span class="material-icons-outlined">logout</span> Log Out
-            </a>
+            <span class="material-icons-outlined">logout</span> Log Out
         </li>
-    </ul>
+    </a>
+</ul>
+
+
 </aside>
+        
+    <script>
+    // Function to get the current page with query parameters
+    function getCurrentPage() {
+        var pathname = window.location.pathname.split("/").pop();
+        var search = window.location.search;
+        return pathname + search;
+    }
+
+    // Map the current page with query parameters to the corresponding sidebar link ID
+    var pageToLinkId = {
+        "dashboard-link": ["managerDashboard.jsp"],
+        "employee-link": ["employeeServlet?action=emplist", "employeeServlet?action=empnew"],
+        "attendances-link": ["attendancesList.jsp"],
+        "customers-link": ["customersServlet?action=custlist", "customersServlet?action=custnew"],
+        "sales-link": ["processSales.jsp", "sales.jsp"],
+        "suppliers-link": ["suppliersServlet?action=suplist", "suppliersServlet?action=supnew"],
+        "expenses-link": ["expensesList.jsp", "expenses.jsp"],
+        "product-link": ["productsServlet?action=prodlist", "productsServlet?action=prodnew"],
+        "logout-link": ["loginPage.jsp"]
+    };
+
+    // Get the current page with query parameters
+    var currentPage = getCurrentPage();
+
+    // Loop through the keys in the pageToLinkId object to find a match
+    for (var linkId in pageToLinkId) {
+        var urls = pageToLinkId[linkId];
+        for (var i = 0; i < urls.length; i++) {
+            if (currentPage.startsWith(urls[i])) {
+                var activeLink = document.getElementById(linkId);
+
+                if (activeLink) {
+                    activeLink.querySelector(".sidebar-list-item").classList.add("active");
+                }
+                break;
+            }
+        }
+    }
+</script>
+
+

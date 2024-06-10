@@ -4,16 +4,31 @@
     Author     : A S U S
 --%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="org.json.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@page session="true" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Profile</title>
+        <!-- Bootstrap CSS -->
+        <% String fname = (String) session.getAttribute("firstName"); %>
+        <!-- Montserrat Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Material Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+        <!-- Custom Styles -->
+        <link rel="stylesheet" href="css/styles.css">
         <style>
-            .profile-card {
+            body {
+                font-family: 'Montserrat', sans-serif;
+            }
+           .profile-card {
                 background-color: #f5f5f5;
                 border: 1px solid #ccc;
                 border-radius: 10px;
@@ -46,14 +61,38 @@
                 border-radius: 5px;
                 font-size: 18px;
             }
-
         </style>
     </head>
     <body>
+        <div class="grid-container">
+            <!-- Header -->
+            <header class="header">
+                <h2>JERNIH TILING ENT</h2>
+            </header>
+            <!-- End Header -->
 
-        <%
-        String role= (String) session.getAttribute("role");
-        %>
+            
+            <!-- Sidebar -->
+            <%
+            String role= (String) session.getAttribute("role");
+            %>
+            <% if ("manager".equals(role)) { %>
+            <jsp:include page="managerNavBar.jsp"/>
+            <% } else { %>
+            <jsp:include page="clerkNavBar.jsp"/>
+            <% } %>
+            <!-- End Sidebar -->
+
+            <!-- Main -->
+            <main class="main-container">
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    USER PROFILE
+                </h2>
+                <hr>
+
+               
+
+          
 
         <% if ("manager".equals(role)) { %>
 
@@ -81,18 +120,8 @@
                 
                 
             if (rs.next()) { %>
-        <jsp:include page="header.jsp"/>
-        <jsp:include page="managerNavBar.jsp"/>
         <br>
 
-        <h2 style="font-family: 'Arial', sans-serif;
-            color: #333;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;">
-            MY PROFILE
-        </h2>
         <br>
         <div class="profile-card">
 
@@ -141,8 +170,6 @@
                 
                 
             if (rs.next()) { %>
-        <jsp:include page="header.jsp"/>
-        <jsp:include page="clerkNavBar.jsp"/>
         <br>
 
         <h2 style="font-family: 'Arial', sans-serif;
@@ -198,8 +225,6 @@
                 
                 
             if (rs.next()) { %>
-        <jsp:include page="header.jsp"/>
-        <jsp:include page="staffNavBar.jsp"/>
         <br>
 
         <h2 style="font-family: 'Arial', sans-serif;
@@ -235,6 +260,13 @@
           cn.close(); 
     
      } %>
+            </main>
 
+            <br>
+          
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="js/scripts.js"></script>
     </body>
 </html>
+

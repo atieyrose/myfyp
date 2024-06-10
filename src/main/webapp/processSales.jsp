@@ -15,7 +15,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard</title>
+        <title>Sales List</title>
         <!-- Bootstrap CSS -->
 
         <% String fname = (String) session.getAttribute("firstName"); %>
@@ -120,7 +120,7 @@
             <% 
             if ("manager".equals(role) || "clerk".equals(role)) { 
             %>
-             <a href="customersServlet?action=custnew" class="btn btn-success float-right">Add New Customer</a>
+             <a href="sales.jsp" class="btn btn-success float-right">Add New Sale</a>
             <% } else { 
                 } %>
             <br><br>

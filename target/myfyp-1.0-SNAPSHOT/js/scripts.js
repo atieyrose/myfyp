@@ -25,7 +25,7 @@ function closeSidebar() {
 
 // ---------- CHARTS ----------
 
-// BAR CHART
+//// BAR CHART
 const barChartOptions = {
   series: [
     {
@@ -124,3 +124,51 @@ const areaChart = new ApexCharts(
   areaChartOptions
 );
 areaChart.render();
+
+function updateBarChart(barChartData) {
+  const barChartOptions = {
+    series: [
+      {
+        data: barChartData.data,
+      },
+    ],
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ['#246dec', '#cc3c43', '#367952', '#f5b74f', '#4f35a1'],
+    plotOptions: {
+      bar: {
+        distributed: true,
+        borderRadius: 4,
+        horizontal: false,
+        columnWidth: '40%',
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      show: false,
+    },
+    xaxis: {
+      categories: barChartData.categories,
+    },
+    yaxis: {
+      title: {
+        text: 'Count',
+      },
+    },
+  };
+
+  const barChart = new ApexCharts(
+    document.querySelector('#bar-chart'),
+    barChartOptions
+  );
+  barChart.render();
+}
+
+

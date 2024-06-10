@@ -29,11 +29,11 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto"> <!-- Change to ml-auto for right alignment on larger screens -->
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("managerDashboard.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="managerDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
+                    <li class="nav-item <%= (request.getRequestURI().endsWith("clerkDashboard.jsp")) ? "active" : "" %>">
+                        <a class="nav-link" href="clerkDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("attendancesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="attendancesList.jsp">Attendances <span class="sr-only">(current)</span></a>
+                    <li class="nav-item <%= (request.getRequestURI().endsWith("attendancesListStaff.jsp")) ? "active" : "" %>">
+                        <a class="nav-link" href="attendancesListStaff.jsp">Attendances <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item <%= (request.getRequestURI().endsWith("customersServlet?action=custlist")) ? "active" : "" %>">
                         <a class="nav-link" href="customersServlet?action=custlist">Customers <span class="sr-only">(current)</span></a>

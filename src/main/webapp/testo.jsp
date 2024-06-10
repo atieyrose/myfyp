@@ -1,197 +1,253 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- 
+    Document   : suppliersList
+    Created on : 5 Jan 2024, 3:02:44 am
+    Author     : A S U S
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="org.json.*" %>
-<%@ page session="true" %>
-
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@page session="true" %>
 <!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Process Sales</title>
-    <jsp:include page="bootstrap.jsp"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .center-table {
-            margin: 0 auto;
-            width: 60%; /* Adjust the width as needed */
-        }
-        .table {
-            background-color: #ffffff;
-        }
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <!-- Bootstrap CSS -->
 
-        .table th {
-            background-color: #999999;
-            color: #ffffff;
-        }
-
-        .table td, .table th {
-            border: 1px solid #dee2e6;
-            padding: 14px;
-            text-align: center;
-        }
-
-        .table a {
-            text-decoration: none;
-            margin-right: 10px;
-        }
-
-        .table a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-<jsp:include page="header.jsp"/>
-<%
-String role= (String) session.getAttribute("role");
-%>
-
-<% if ("manager".equals(role)) { %>
-<jsp:include page="managerNavBar.jsp"/>
-<% } else { %>
-<jsp:include page="clerkNavBar.jsp"/> 
-<% } %>
-
-<div class="container">
-    <h2>Sales List</h2>
-    <a href="newjsp1.jsp" class="btn btn-success float-right">Add New Sales</a>
-
-
-    <%
-
-        Connection c = null;
-        PreparedStatement pSales = null;
-        ResultSet rSales = null;
-
-        int rowsPerPage = 15; // Number of rows per page
-        int currentPage = 1; // Default current page
-        int totalRows = 0; // Total number of rows
-        int totalPages = 0; // Total number of pages
-
-        // Get current page from request parameter
-        String pageStr = request.getParameter("page");
-        if (pageStr != null && !pageStr.isEmpty()) {
-            currentPage = Integer.parseInt(pageStr);
-        }
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            c = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
-
-            // Count total number of rows
-            String countQuery = "SELECT COUNT(*) FROM sales";
-            Statement countStatement = c.createStatement();
-            ResultSet countResult = countStatement.executeQuery(countQuery);
-            if (countResult.next()) {
-                totalRows = countResult.getInt(1);
+        <% String fname = (String) session.getAttribute("firstName"); %>
+        <!-- Montserrat Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Material Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+        <!--        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">-->
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <!-- Custom Styles -->
+        <link rel="stylesheet" href="css/styles.css">
+         <style>
+            body {
+                font-family: 'Montserrat', sans-serif;
             }
+            .table-container {
+                margin: 20px auto;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+            }
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .table th, .table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            .table thead th {
+                background-color: #333;
+                color: #fff;
+                text-transform: uppercase;
+            }
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 5px 0;
+                text-decoration: none;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+            .btn-warning {
+                background-color: #f0ad4e;
+                color: #fff;
+            }
+            .btn-warning:hover {
+                background-color: #ec971f;
+            }
+            .btn-danger {
+                background-color: #d9534f;
+                color: #fff;
+            }
+            .btn-danger:hover {
+                background-color: #c9302c;
+            }
+            @media (max-width: 768px) {
+                .table-container {
+                    padding: 10px;
+                }
+                .table th, .table td {
+                    padding: 8px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="grid-container">
+            <!-- Header -->
+            <header class="header">
+                <h2>JERNIH TILING ENT</h2>
+                
+            </header>
+            <!-- End Header -->
 
-            // Calculate total number of pages
-            totalPages = (int) Math.ceil((double) totalRows / rowsPerPage);
-
-            // Close resources
-            countResult.close();
-            countStatement.close();
-
-            // Pagination logic
-            int offset = (currentPage - 1) * rowsPerPage; // Offset for current page
-            String display = "SELECT * FROM sales LIMIT ?, ?";
-            pSales = c.prepareStatement(display);
-            pSales.setInt(1, offset);
-            pSales.setInt(2, rowsPerPage);
-            rSales = pSales.executeQuery();
-
-    %>
-
-    <div class="center-table">
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Sale ID</th>
-                    <th>Customer ID</th>
-                    <th>Total</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+            <!-- Sidebar -->
             <%
-                while (rSales.next()) {
-                    int saleid = rSales.getInt("saleID");
-                    int custid = rSales.getInt("custID");
-                    double total = rSales.getDouble("total");
-                    Date date = rSales.getDate("date");
+        String role= (String) session.getAttribute("role");
+        %>
+             <% if ("manager".equals(role)) { %>
+    <jsp:include page="managerNavBar.jsp"/>
+    <% } else { %>
+    <jsp:include page="clerkNavBar.jsp"/>
+    <% } %>
+            <!-- End Sidebar -->
+
+            <!-- Main -->
+            <main class="main-container">
+               <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Products List
+                </h2>
+            <hr>
+            
+           <% 
+            if ("manager".equals(role) || "clerk".equals(role)) { 
             %>
-            <tbody>
-                <tr>
-                    <td><%= saleid %></td>
-                    <td><%= custid %></td>
-                    <td><%= total %></td>
-                    <td><%= date %></td>
-                    <td><a href="salesDetails.jsp?saleID=<%= saleid %>&custID=<%= custid %>">Details</a></td>
+            <a href="productsServlet?action=prodnew" class="btn btn-success float-right">Add New Product</a>
+            <% } else { 
+                } %>
+            <br><br>
+            
+              <div class="container col-md-5">
+            <div class="">
+                <div class="card-body">
+
+                    <c:if test="${employee != null}">
+                        <form action="employeeServlet" method="post">
+                            <input type="hidden" name="action" value="empupdate"><!-- comment -->
+
+                        </c:if>
+
+                        <c:if test="${employee == null}">
+                            <form action="employeeServlet" method="post">
+                                <input type="hidden" name="action" value="empinsert"><!-- comment -->
+
+                            </c:if>
+
+                            <h3>
+                                <c:if test="${employee == null}">
+                                    Add New Employee
+                                </c:if>
+                                <c:if test="${employee != null}">
+                                    Update Employee
+                                </c:if>
+                            </h3>
+                            <br>
+
+                            <c:if test="${employee != null}">
+                                <input type="hidden" name="ID" value="<c:out value='${employee.ID}'/>" />
+                            </c:if>
 
 
-                </tr>
-            </tbody>
+                            <fieldset class="form-group">
+                                <label>First Name</label>
+                                <input type="text" value="<c:out value='${employee.firstName}'/>" class="form-control" name="firstName" placeholder="Enter First Name" required="required"><!-- comment -->
+                            </fieldset>
 
-            <%
-                }
-            %>
-        </table>
+                            <fieldset class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" value="<c:out value='${employee.lastName}'/>" class="form-control" name="lastName" placeholder="Enter Last Name" required="required"><!-- comment -->
+                            </fieldset>
+                            
+                            <fieldset class="form-group">
+                                <label>Card ID</label>
+                                <input type="text" value="<c:out value='${employee.cardID}'/>" class="form-control" name="cardID" placeholder="Enter Card ID"><!-- comment -->
+                            </fieldset>
 
-        <!-- Pagination -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item <%= currentPage == 1 ? "disabled" : "" %>">
-                    <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <% for (int i = 1; i <= totalPages; i++) { %>
-                   <li class="page-item <%= currentPage == i ? "active" : "" %>">
-                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-                    </li>
-                <% } %>
-                <li class="page-item <%= currentPage == 1 ? "disabled" : "" %>">
-                    <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+                            <fieldset class="form-group">
+                                <label>Role</label>
+                                <select class="form-control" name="role" required="required">
+                                    <option value="">Select Role</option><!--  -->
+                                    <c:choose>
+                                        <c:when test="${employee.role eq 'clerk'}">
+                                            <option value="clerk" selected>Clerk</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="clerk">Clerk</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <c:choose>
+                                        <c:when test="${employee.role eq 'staff'}">
+                                            <option value="staff" selected>Staff</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="staff">Staff</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </select><!-- comment -->
+                            </fieldset>
 
-    <%
-        } catch (Exception e) {
-            // Handle any exceptions
-            e.printStackTrace();
-            out.println("<p>Error occurred: " + e.getMessage() + "</p>");
-        } finally {
-            // Close resources in the finally block
-            if (rSales != null) {
-                try {
-                    rSales.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (pSales != null) {
-                try {
-                    pSales.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    %>
-</div>
+                            <fieldset class="form-group">
+                                <label>IC Number</label>
+                                <input type="text" value="<c:out value='${employee.icNo}'/>" class="form-control" name="icNo" placeholder="Enter IC Number" required="required"><!-- comment -->
+                            </fieldset>
 
-<jsp:include page="footer.jsp"/>
-</body>
+
+                            <fieldset class="form-group">
+                                <label>Date Of Birth</label>
+                                <input type="date" value="<c:out value='${employee.DOB}'/>" class="form-control" name="DOB" placeholder="Enter Date Of Birth" required="required"><!-- comment -->
+                            </fieldset>
+
+
+
+                            <fieldset class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" value="<c:out value='${employee.phoneNo}'/>" class="form-control" name="phoneNo" placeholder="Enter Phone Number" required="required"><!-- comment -->
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="<c:out value='${employee.email}'/>" class="form-control" name="email" placeholder="Enter Email" required="required"><!-- comment -->
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Address</label>
+                                <input type="text" value="<c:out value='${employee.address}'/>" class="form-control" name="address" placeholder="Enter Address" required="required"><!-- comment -->
+                            </fieldset>
+
+                            <c:if test="${employee != null}">
+                                <input type="hidden" name="password" value="<c:out value='${employee.password}'/>" />
+                            </c:if>
+
+                            <c:if test="${employee == null}">
+                                <fieldset class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" value="<c:out value='${employee.password}'/>" class="form-control" name="password" required="required"><!-- comment -->
+                                </c:if>
+                            </fieldset>
+
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+            </main>
+  
+   
+    <br>
+ 
+
+  
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
 </html>

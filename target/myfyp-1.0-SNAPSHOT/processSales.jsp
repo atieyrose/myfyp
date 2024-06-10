@@ -1,82 +1,131 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- 
+    Document   : salesList
+    Created on : 22 Dec 2023, 5:39:18 pm
+    Author     : A S U S
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="org.json.*" %>
-<%@ page session="true" %>
-
-
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@page session="true" %>
 <!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Process Sales</title>
-    <jsp:include page="bootstrap.jsp"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <!-- Bootstrap CSS -->
 
-        .container {
-            max-width: 1100px;
-            background-color: #ffffff;
-            padding: 20px;
-            margin: 20px auto;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
+        <% String fname = (String) session.getAttribute("firstName"); %>
+        <!-- Montserrat Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Material Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+        <!--        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">-->
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <!-- Custom Styles -->
+        <link rel="stylesheet" href="css/styles.css">
+         <style>
+            body {
+                font-family: 'Montserrat', sans-serif;
+            }
+            .table-container {
+                margin: 20px auto;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+            }
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .table th, .table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            .table thead th {
+                background-color: #333;
+                color: #fff;
+                text-transform: uppercase;
+            }
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 5px 0;
+                text-decoration: none;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+            .btn-warning {
+                background-color: #f0ad4e;
+                color: #fff;
+            }
+            .btn-warning:hover {
+                background-color: #ec971f;
+            }
+            .btn-danger {
+                background-color: #d9534f;
+                color: #fff;
+            }
+            .btn-danger:hover {
+                background-color: #c9302c;
+            }
+            @media (max-width: 768px) {
+                .table-container {
+                    padding: 10px;
+                }
+                .table th, .table td {
+                    padding: 8px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="grid-container">
+           <!-- Header -->
+            <header class="header">
+                <h2>JERNIH TILING ENT</h2>
+                
+            </header>
+            <!-- End Header -->
 
-        h2 {
-            text-align: center;
-        }
-
-        .table {
-            background-color: #ffffff;
-        }
-
-        .table th {
-            background-color: #999999;
-            color: #ffffff;
-        }
-
-        .table td, .table th {
-            border: 1px solid #dee2e6;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .table a {
-            text-decoration: none;
-            margin-right: 10px;
-        }
-
-        .table a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <jsp:include page="header.jsp"/>
-    <%
-    String role = (String) session.getAttribute("role");
-    %>
-
-    <% if ("manager".equals(role)) { %>
+            <!-- Sidebar -->
+            <%
+        String role= (String) session.getAttribute("role");
+        %>
+             <% if ("manager".equals(role)) { %>
     <jsp:include page="managerNavBar.jsp"/>
     <% } else { %>
     <jsp:include page="clerkNavBar.jsp"/>
     <% } %>
+            <!-- End Sidebar -->
 
-    <div class="container">
-        <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-            Sales List
-        </h2>
-        <hr>
-        <% if ("manager".equals(role) || "clerk".equals(role)) { %>
-        <a href="newjsp1.jsp" class="btn btn-success float-right">Add New Sales</a>
-        <% } %>
-        <br><br>
-
-        <%
+            <!-- Main -->
+            <main class="main-container">
+               <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Sales List
+                </h2>
+            <hr>
+            
+            <% 
+            if ("manager".equals(role) || "clerk".equals(role)) { 
+            %>
+             <a href="customersServlet?action=custnew" class="btn btn-success float-right">Add New Customer</a>
+            <% } else { 
+                } %>
+            <br><br>
+            
+               <%
         Connection c = null;
         PreparedStatement pSales = null;
         PreparedStatement pSalesItems = null;
@@ -306,8 +355,9 @@
             }
         }
         %>
-    </div>
 
-    <jsp:include page="footer.jsp"/>
-</body>
+        
+        <!-- Custom JS -->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>

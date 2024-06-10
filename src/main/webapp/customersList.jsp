@@ -6,92 +6,103 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@page session="true" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Employee List Page</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <jsp:include page="bootstrap.jsp" />
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm">
-        <style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <!-- Bootstrap CSS -->
+
+        <% String fname = (String) session.getAttribute("firstName"); %>
+        <!-- Montserrat Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Material Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+        <!--        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">-->
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <!-- Custom Styles -->
+        <link rel="stylesheet" href="css/styles.css">
+         <style>
             body {
-                background-color: #f8f9fa;
+                font-family: 'Montserrat', sans-serif;
             }
-
-            .container {
-                max-width: 1100px;
-                background-color: #ffffff;
-                padding: 20px;
+            .table-container {
                 margin: 20px auto;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+                padding: 20px;
                 border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
             }
-
-            h2 {
-                text-align: center;
-            }
-
             .table {
-                background-color: #ffffff;
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
             }
-
-            .table th {
-                background-color: #999999;
-                color: #ffffff;
-            }
-
-            .table td, .table th {
-                border: 1px solid #dee2e6;
+            .table th, .table td {
                 padding: 12px;
-                text-align: center;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
             }
-
-            .table a {
-                text-decoration: none;
-                margin-right: 10px;
+            .table thead th {
+                background-color: #333;
+                color: #fff;
+                text-transform: uppercase;
             }
-
-            .table a:hover {
-                text-decoration: underline;
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
             }
-
-            .add-customer-link {
-                text-align: right;
-                margin-top: 20px;
-            }
-
-            .add-employee-btn {
-                background-color: #4CAF50;
-                color: white;
-                border-radius: 5px;
-                text-decoration: none;
-                font-weight: bold;
-                transition: background-color 0.3s ease;
-                width: 200px;
-                height: 50px;
-                text-align: center;
+            .btn {
                 display: inline-block;
-            }
-
-            .add-employee-btn:hover, .add-employee-btn:focus {
-                background-color: #45a049;
-                color: white;
+                padding: 10px 15px;
+                margin: 5px 0;
                 text-decoration: none;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+            .btn-warning {
+                background-color: #f0ad4e;
+                color: #fff;
+            }
+            .btn-warning:hover {
+                background-color: #ec971f;
+            }
+            .btn-danger {
+                background-color: #d9534f;
+                color: #fff;
+            }
+            .btn-danger:hover {
+                background-color: #c9302c;
+            }
+            @media (max-width: 768px) {
+                .table-container {
+                    padding: 10px;
+                }
+                .table th, .table td {
+                    padding: 8px;
+                }
             }
         </style>
     </head>
     <body>
-        <%
+        <div class="grid-container">
+            <!-- Header -->
+            <header class="header">
+                <h2>JERNIH TILING ENT</h2>
+                
+            </header>
+            <!-- End Header -->
+
+            <!-- Sidebar -->
+            <%
         String role= (String) session.getAttribute("role");
         %>
-        <jsp:include page="header.jsp"/>
-        <% if ("manager".equals(role)) { %>
+            <% if ("manager".equals(role)) { %>
         <jsp:include page="managerNavBar.jsp"/>
         <% } else if ("clerk".equals(role)) { %>
         <jsp:include page="clerkNavBar.jsp"/>
@@ -100,22 +111,24 @@
         <% } else { %>
         <jsp:include page="staffNavBar.jsp"/>
         <% } %>
-        <br>
-        <div class="row">
-            <div class="container">
-                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                    Customers List
+            <!-- End Sidebar -->
+
+            <!-- Main -->
+            <main class="main-container">
+               <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Customer List
                 </h2>
-                <hr>
-                 <% 
+            <hr>
+            
+            <% 
             if ("manager".equals(role) || "clerk".equals(role)) { 
             %>
              <a href="customersServlet?action=custnew" class="btn btn-success float-right">Add New Customer</a>
             <% } else { 
                 } %>
-               
-                <br><br>
-                <table class="table table-striped table-bordered">
+            <br><br>
+
+          <table class="table table-striped table-bordered">
                     <thead class="thead-dark">
                         <tr>
                             <th>Customer ID</th>
@@ -145,12 +158,15 @@
                         </c:forEach>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <br>
-        <jsp:include page="footer.jsp" />
 
-        <script>
+            </div>
+
+           
+            </main>
+            <!-- End Main -->
+        </div>
+        <!-- Scripts -->
+            <script>
 // Function to show a confirmation message when a Delete button is clicked
             document.querySelectorAll(".deleteButton").forEach(function (button) {
                 button.addEventListener("click", function () {
@@ -173,5 +189,9 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- ApexCharts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+        <!-- Custom JS -->
+        <script src="js/scripts.js"></script>
     </body>
 </html>

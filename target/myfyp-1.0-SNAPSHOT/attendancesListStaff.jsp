@@ -1,9 +1,3 @@
-<%-- 
-    Document   : attendancesListStaff
-    Created on : 26 May 2024, 11:44:52 pm
-    Author     : A S U S
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
@@ -12,9 +6,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Attendance List</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <jsp:include page="bootstrap.jsp" />
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -68,17 +61,21 @@
         <%
         String role = (String) session.getAttribute("role");
         String uid = (String) session.getAttribute("uid");
-        out.println(role);
-        out.println(uid);
-        %>
 
-        <% if ("manager".equals(role)) { %>
+        if ("manager".equals(role)) { 
+        %>
         <jsp:include page="managerNavBar.jsp"/>
-        <% } else if ("clerk".equals(role)) { %>
+        <% 
+        } else if ("clerk".equals(role)) { 
+        %>
         <jsp:include page="clerkNavBar.jsp"/> 
-        <% } else { %>
+        <% 
+        } else { 
+        %>
         <jsp:include page="staffNavBar.jsp"/>
-        <%}%>
+        <% 
+        } 
+        %>
 
         <br>
         
@@ -96,43 +93,108 @@
             
             int rowsPerPage = 15; // Number of rows per page
             int currentPage = 1; // Default current page
-            int totalRows = 0; // Total number of rows
-            int totalPages = 0; // Total number of pages
 
             // Get current page from request parameter
             String pageStr = request.getParameter("page");
             if (pageStr != null && !pageStr.isEmpty()) {
                 currentPage = Integer.parseInt(pageStr);
             }
-            
+            int startRow = (currentPage - 1) * rowsPerPage;
+
             try {
-            
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            c = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
-            
-            String attshow = "SELECT a.attendID, a.UID, a.date, a.day, a.clockin, a.clockout, a.duration, e.firstName, e.ID " +
-                                "FROM attendances a JOIN employee e ON a.UID = e.cardID " +
-                                "WHERE a.UID = ? LIMIT ?, ?";
-            
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (r != null) {
-                        try {
-                            r.close();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                c = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
+
+                String attshow = "SELECT a.attendID, a.UID, a.date, a.day, a.clockin, a.clockout, a.duration, e.firstName, e.ID " +
+                                 "FROM attendances a JOIN employee e ON a.UID = e.cardID " +
+                                 "WHERE a.UID = ? LIMIT ?, ?";
+                ps = c.prepareStatement(attshow);
+                ps.setString(1, uid);
+                ps.setInt(2, startRow);
+                ps.setInt(3, rowsPerPage);
+                r = ps.executeQuery();
+            %>
+            <div class="center-table">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Date</th>
+                            <th>Day</th>
+                            <th>Clock IN</th>
+                            <th>Clock OUT</th>
+                            <th>Duration (H)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                    while (r.next()) {
+                        Date dateObj = r.getDate("date");
+                        String formattedDate = (dateObj != null) ? new SimpleDateFormat("d MMM yyyy").format(dateObj) : "";
+
+                        String day = r.getString("day");
+
+                        Time clockinTime = r.getTime("clockin");
+                        String formattedClockin = (clockinTime != null) ? new SimpleDateFormat("h:mm a").format(clockinTime) : "";
+
+                        Time clockoutTime = r.getTime("clockout");
+                        String formattedClockout = (clockoutTime != null) ? new SimpleDateFormat("h:mm a").format(clockoutTime) : "";
+
+                        String duration = r.getString("duration");
+                        if (duration == null) {
+                            duration = "-";
                         }
+                    %>
+                        <tr>
+                            <td><%= uid %></td>
+                            <td><%= formattedDate %></td>
+                            <td><%= day %></td>
+                            <td><%= formattedClockin %></td>
+                            <td><%= formattedClockout %></td>
+                            <td><%= duration %></td>
+                        </tr>
+                    <%
                     }
-                    if (ps != null) {
-                        try {
-                            ps.close();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                    %>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <%= (currentPage == 1) ? "disabled" : "" %>">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+                        </li>
+                        <li class="page-item <%= (r.next()) ? "" : "disabled" %>">
+                            <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <%
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                if (r != null) {
+                    try {
+                        r.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
                 }
-
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (c != null) {
+                    try {
+                        c.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             %>
         </div>
     </body>

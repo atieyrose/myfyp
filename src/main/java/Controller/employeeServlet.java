@@ -83,24 +83,23 @@ public class employeeServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void insertemployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException {
+private void insertemployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ParseException {
+    String fname = request.getParameter("firstName");
+    String lname = request.getParameter("lastName");
+    String card = request.getParameter("cardID");
+    String role = request.getParameter("role");
+    String icno = request.getParameter("icNo");
+    Date dob = Date.valueOf(request.getParameter("DOB"));
+    String phoneno = request.getParameter("phoneNo");
+    String email = request.getParameter("email");
+    String address = request.getParameter("address");
+    String password = request.getParameter("password");
 
-        String fname = request.getParameter("firstName");
-        String lname = request.getParameter("lastName");
-        String card = request.getParameter("cardID");
-        String role = request.getParameter("role");
-        String icno = request.getParameter("icNo");
-        Date dob = Date.valueOf(request.getParameter("DOB"));
-        String phoneno = request.getParameter("phoneNo");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String password = request.getParameter("password");
+    employee newemployee = new employee(fname, lname, card, role, icno, dob, phoneno, email, address, password);
+    empDAO.insertemployee(newemployee);
+    response.sendRedirect("employeeServlet?action=emplist");
+}
 
-        employee newemployee = new employee(fname, lname, card, role, icno, dob, phoneno, email, address, password);
-        empDAO.insertemployee(newemployee);
-        response.sendRedirect("employeeServlet?action=emplist");
-
-    }
 
     private void deleteemployee(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int ID = Integer.parseInt(request.getParameter("ID"));

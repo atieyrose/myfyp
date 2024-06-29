@@ -23,11 +23,11 @@
         <!-- Material Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
         <!--        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">-->
-<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
         <!-- Custom Styles -->
         <link rel="stylesheet" href="css/styles.css">
-         <style>
+        <style>
             body {
                 font-family: 'Montserrat', sans-serif;
             }
@@ -87,6 +87,27 @@
                     padding: 8px;
                 }
             }
+            .enhanced-button {
+                display: inline-block;
+                padding: 15px 30px;
+                font-size: 16px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #fff;
+                background: #28a745;
+                border: none;
+                border-radius: 25px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+            .enhanced-button:hover {
+                background: #218838;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
         </style>
     </head>
     <body>
@@ -94,44 +115,45 @@
             <!-- Header -->
             <header class="header">
                 <h2>JERNIH TILING ENT</h2>
-                
+
             </header>
             <!-- End Header -->
 
             <!-- Sidebar -->
             <%
         String role= (String) session.getAttribute("role");
-        %>
+            %>
             <% if ("manager".equals(role)) { %>
-        <jsp:include page="managerNavBar.jsp"/>
-        <% } else if ("clerk".equals(role)) { %>
-        <jsp:include page="clerkNavBar.jsp"/>
-        <% } else if ("admin".equals(role)) { %>
-        <jsp:include page="adminNavBar.jsp"/>
-        <% } else { %>
-        <jsp:include page="staffNavBar.jsp"/>
-        <% } %>
+            <jsp:include page="managerNavBar.jsp"/>
+            <% } else if ("clerk".equals(role)) { %>
+            <jsp:include page="clerkNavBar.jsp"/>
+            <% } else if ("admin".equals(role)) { %>
+            <jsp:include page="adminNavBar.jsp"/>
+            <% } else { %>
+            <jsp:include page="staffNavBar.jsp"/>
+            <% } %>
             <!-- End Sidebar -->
 
             <!-- Main -->
             <main class="main-container">
-               <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
                     Customer List
                 </h2>
-            <hr>
-            
-            <% 
-            if ("manager".equals(role) || "clerk".equals(role)) { 
-            %>
-             <a href="customersServlet?action=custnew" class="btn btn-success float-right">Add New Customer</a>
-            <% } else { 
-                } %>
-            <br><br>
+                <hr>
 
-          <table class="table table-striped table-bordered">
+                <% 
+                if ("manager".equals(role) || "clerk".equals(role)) { 
+                %>
+                <button class="enhanced-button" onclick="window.location.href = 'customersServlet?action=custnew'">Add New Customer</button>
+
+                <% } else { 
+                } %>
+                <br><br>
+
+                <table class="table table-striped table-bordered">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Customer ID</th>
+                            
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Phone Number</th>
@@ -143,7 +165,7 @@
                     <tbody>
                         <c:forEach var="customers" items="${listcustomers}">
                             <tr>
-                                <td><c:out value="${customers.custID}" /></td>
+                         
                                 <td><c:out value="${customers.firstName}" /></td>
                                 <td><c:out value="${customers.lastName}" /></td>
                                 <td><c:out value="${customers.phoneNo}" /></td>
@@ -159,14 +181,14 @@
                     </tbody>
                 </table>
 
-            </div>
 
-           
+
+
             </main>
             <!-- End Main -->
         </div>
         <!-- Scripts -->
-            <script>
+        <script>
 // Function to show a confirmation message when a Delete button is clicked
             document.querySelectorAll(".deleteButton").forEach(function (button) {
                 button.addEventListener("click", function () {

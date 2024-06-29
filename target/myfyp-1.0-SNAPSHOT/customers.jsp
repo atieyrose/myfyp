@@ -109,73 +109,81 @@
 
             <!-- Main -->
             <main class="main-container">
-                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                    Add New Customers
-                </h2>
+                <c:if test="${customers == null}">
+                    <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                        Add New Customers
+                    </h2>
+                </c:if>
+
+                <c:if test="${customers != null}">
+                    <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                        Update Customers
+                    </h2>
+                </c:if>
                 <hr>
 
-               <div class="container col-md-5">
-            <div class="card">
-                <div class="card-body">
-
-                    <c:if test="${customers != null}">
-                        <form action="customersServlet" method="post">
-                            <input type="hidden" name="action" value="custupdate"><!-- comment -->
-
-                        </c:if>
-
-                        <c:if test="${customers == null}">
-                            <form action="customersServlet" method="post">
-                                <input type="hidden" name="action" value="custinsert"><!-- comment -->
-
-                            </c:if>
-
-                            <h3>
-                                <c:if test="${customers == null}">
-                                    Add New Customer
-                                </c:if>
-                                <c:if test="${customers != null}">
-                                    Update Customer
-                                </c:if>
-                            </h3>
-                           
+                <div class="container col-md-5">
+                    <div class="card">
+                        <div class="card-body">
 
                             <c:if test="${customers != null}">
-                                <input type="hidden" name="custID" value="<c:out value='${customers.custID}'/>" />
-                            </c:if>
+                                <form action="customersServlet" method="post">
+                                    <input type="hidden" name="action" value="custupdate"><!-- comment -->
+
+                                </c:if>
+
+                                <c:if test="${customers == null}">
+                                    <form action="customersServlet" method="post">
+                                        <input type="hidden" name="action" value="custinsert"><!-- comment -->
+
+                                    </c:if>
+
+                                    <h3>
+                                        <c:if test="${customers == null}">
+                                            Add New Customer
+                                        </c:if>
+                                        <c:if test="${customers != null}">
+                                            Update Customer
+                                        </c:if>
+                                    </h3>
 
 
-                            <fieldset class="form-group fieldset-spacing">
-                                <label>First Name</label>
-                                <input type="text" value="<c:out value='${customers.firstName}'/>" class="form-control input-size" name="firstName" required="required"><!-- comment -->
-                            </fieldset>
-
-                            <fieldset class="form-group fieldset-spacing">
-                                <label>Last Name</label>
-                                <input type="text" value="<c:out value='${customers.lastName}'/>" class="form-control input-size" name="lastName" required="required"><!-- comment -->
-                            </fieldset>
-
-                            <fieldset class="form-group fieldset-spacing">
-                                <label>Phone Number</label>
-                                <input type="text" value="<c:out value='${customers.phoneNo}'/>" class="form-control input-size" name="phoneNo" required="required"><!-- comment -->
-                            </fieldset>
-
-                            <fieldset class="form-group fieldset-spacing">
-                                <label>Email</label>
-                                <input type="email" value="<c:out value='${customers.email}'/>" class="form-control input-size" name="email" required="required"><!-- comment -->
-                            </fieldset>
-
-                            <fieldset class="form-group fieldset-spacing">
-                                <label>Address</label>
-                                <input type="text" value="<c:out value='${customers.address}'/>" class="form-control input-size" name="address" required="required"><!-- comment -->
-                            </fieldset>
+                                    <c:if test="${customers != null}">
+                                        <input type="hidden" name="custID" value="<c:out value='${customers.custID}'/>" />
+                                    </c:if>
 
 
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </form>
+                                    <fieldset class="form-group fieldset-spacing">
+                                        <label>First Name</label>
+                                        <input type="text" value="<c:out value='${customers.firstName}'/>" class="form-control input-size" name="firstName" required="required"><!-- comment -->
+                                    </fieldset>
+
+                                    <fieldset class="form-group fieldset-spacing">
+                                        <label>Last Name</label>
+                                        <input type="text" value="<c:out value='${customers.lastName}'/>" class="form-control input-size" name="lastName" required="required"><!-- comment -->
+                                    </fieldset>
+
+                                    <fieldset class="form-group fieldset-spacing">
+                                        <label>Phone Number</label>
+                                        <input type="text" value="<c:out value='${customers.phoneNo}'/>" class="form-control input-size" name="phoneNo" required="required"><!-- comment -->
+                                    </fieldset>
+
+                                    <fieldset class="form-group fieldset-spacing">
+                                        <label>Email</label>
+                                        <input type="email" value="<c:out value='${customers.email}'/>" class="form-control input-size" name="email" required="required"><!-- comment -->
+                                    </fieldset>
+
+                                    <fieldset class="form-group fieldset-spacing">
+                                        <label>Address</label>
+                                        <input type="text" value="<c:out value='${customers.address}'/>" class="form-control input-size" name="address" required="required"><!-- comment -->
+                                    </fieldset>
+
+
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
             </main>
 
             <br>

@@ -4,19 +4,18 @@
     Author     : A S U S
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="org.json.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@page session="true" %>
+<%@ page session="true" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Add New Sale</title>
-        <!-- Bootstrap CSS -->
+        <title>Add New Expense</title>
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -92,6 +91,76 @@
             .input-size {
                 width: 1000px; /* Adjust the width as needed */
             }
+            table.form-table {
+                width: 45%;
+                border-collapse: collapse;
+            }
+            table.form-table td {
+                width: 33%;
+                padding: 10px;
+            }
+
+            table.form-table input,
+            table.form-table select,
+            table.form-table button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            /* Horizontal Pagination */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                list-style: none;
+                padding: 0;
+            }
+            .page-item {
+                margin: 0 5px;
+            }
+            .page-link {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            .page-link:hover {
+                background-color: #f1f1f1;
+                color: #333;
+            }
+            .page-item.active .page-link {
+                background-color: #333;
+                color: #fff;
+            }
+            .page-item.disabled .page-link {
+                color: #ddd;
+                pointer-events: none;
+            }
+            .enhanced-button {
+                display: inline-block;
+                padding: 15px 20px;
+                font-size: 15px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #fff;
+                background: #28a745;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+            .enhanced-button:hover {
+                background: #218838;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
+
         </style>
     </head>
     <body>
@@ -104,7 +173,7 @@
 
             <!-- Sidebar -->
             <%
-            String role= (String) session.getAttribute("role");
+                String role= (String) session.getAttribute("role");
             %>
             <% if ("manager".equals(role)) { %>
             <jsp:include page="managerNavBar.jsp"/>
@@ -116,61 +185,58 @@
             <!-- Main -->
             <main class="main-container">
                 <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                    Add New Sale
+                    Add New Expense
                 </h2>
                 <hr>
-
-
 
                 <div class="container col-md-5">
                     <div class="card">
                         <div class="card-body">
-
                             <%
-                               Connection cn = null;
-                               PreparedStatement ps = null;
-                               ResultSet rs = null;
+                            Connection cn = null;
+                            PreparedStatement ps = null;
+                            ResultSet rs = null;
 
-                               String url = "jdbc:mysql://localhost:3306/fyp";
-                               String user = "root";
-                               String pass = "admin";
+                            String url = "jdbc:mysql://localhost:3306/fyp";
+                            String user = "root";
+                            String pass = "admin";
 
-                               try {
-                                   Class.forName("com.mysql.cj.jdbc.Driver");
-                                   cn = DriverManager.getConnection(url, user, pass);
+                            try {
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                cn = DriverManager.getConnection(url, user, pass);
 
-                                   String customerQuery = "SELECT supID, supName FROM suppliers";
-                                   ps = cn.prepareStatement(customerQuery);
-                                   rs = ps.executeQuery();
-                            
-
+                                String customerQuery = "SELECT supID, supName FROM suppliers";
+                                ps = cn.prepareStatement(customerQuery);
+                                rs = ps.executeQuery();
                             %>
 
-                            <form id="expensesCategory">
-                                <label for="expensesCategory">Select expense category:</label>
-                                <select name="expenseCategory" id="expensesCategory">
-                                    <option value="">Select Category</option>
-                                    <option value="raw_materials">Raw Materials</option>
-                                    <option value="utilities">Utilities</option>
-                                    <option value="services">Services</option>
-                                </select>
+                            <form id="expensesForm" method="post">
+                                <table class="form-table">
+                                    <tr>
+                                        <td><label style="font-size: 1em;" for="expensesCategory">Select expense category:</label></td>
+                                        <td><select name="expenseCategory" id="expensesCategory" style="font-size: 1em; height: 30px;">
+                                                <option value="">Select Category</option>
+                                                <option value="raw_materials">Raw Materials</option>
+                                                <option value="utilities">Utilities</option>
+                                                <option value="services">Services</option>
+                                            </select></td>
+                                    </tr>
 
-                            </form>
 
-                            <form id="expensesForm"  method="post">
-                                <label for="supplierDropdown">Select a Supplier:</label>
-                                <select name="supplierDropdown" id="supplierDropdown">
-                                    <option value="">-- Select a Customer --</option>
-                                    <% while (rs.next()) { %>
-                                    <option value="<%= rs.getInt("supID") %>">
-                                        <%= rs.getString("supName") %>
-                                    </option>
-                                    <% } %>
-                                </select>
-                                <br>
+                                    <tr>
+                                        <td><label style="font-size: 1em;" for="supplierDropdown">Select a Supplier:</label></td>
+                                        <td><select name="supplierDropdown" id="supplierDropdown" style="font-size: 1em; height: 30px;">
+                                                <option value="">-- Select a Supplier --</option>
+                                                <% while (rs.next()) { %>
+                                                <option value="<%= rs.getInt("supID") %>">
+                                                    <%= rs.getString("supName") %>
+                                                </option>
+                                                <% } %>
+                                            </select></td>
+                                    </tr>
 
-                                <%
-                        
+
+                                    <%
                                     } catch (SQLException | ClassNotFoundException e) {
                                         e.printStackTrace();
                                     } finally {
@@ -196,23 +262,21 @@
                                             }
                                         }
                                     }
-                                %>
+                                    %>
 
-                                <%
+                                    <%
                                     try {
                                         cn = DriverManager.getConnection(url, user, pass);
                                         String p = "SELECT prodID, prodName, price FROM products";
                                         ps = cn.prepareStatement(p);
                                         rs = ps.executeQuery();
-                                %>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h2 class="h2-title">Add Item</h2>
-
-                                            <div class="form-group">
-                                                <label for="item" class="mb-2">Item:</label>
-                                                <select id="item" class="form-control" required>
+                                    %>
+                                    <!-- Dynamic item selection form for Raw Materials -->
+                                    <tbody id="rawMaterialsFields" class="form-table" style="display: none;">
+                                        <tr>
+                                            <td><label style="font-size: 1em; " for="item" class="mb-2">Item:</label></td>
+                                            <td>
+                                                <select id="item" class="form-control" style="font-size: 1em; height: 30px;" required>
                                                     <option value="">-- Select an Item --</option>
                                                     <% while (rs.next()) { %>
                                                     <option value="<%= rs.getInt("prodID") %>" data-price="<%= rs.getDouble("price") %>">
@@ -220,92 +284,101 @@
                                                     </option>
                                                     <% } %>
                                                 </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="price" class="mb-2">Price:</label>
-                                                        <span class="input-group-text">$</span>
-                                                    <input type="number" id="price" class="form-control" step="0.01" required readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="quantity" class="mb-2">Quantity:</label>
-                                                <input type="number" id="quantity" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="amount" class="mb-2">Amount:</label>
-                                                        <span class="input-group-text">$</span>
-                                                    <input type="number" id="amount" class="form-control" step="0.01" required readonly>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="button" id="expenseSale" class="btn btn-primary">Add Expense</button>
-                                            </div>
-                                            </form>
-                                        </div>
-                                        <%
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            } finally {
-                                                if (rs != null) {
-                                                    try {
-                                                        rs.close();
-                                                    } catch (SQLException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                if (ps != null) {
-                                                    try {
-                                                        ps.close();
-                                                    } catch (SQLException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                if (cn != null) {
-                                                    try {
-                                                        cn.close();
-                                                    } catch (SQLException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            }
-                                        %>
-                                        <div class="col-md-6">
-                                            <h2 class="h2-title">Sale Details</h2>
-                                            <table id="expenseTable" class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No.</th>
-                                                        <th>Item</th>
-                                                        <th>ID</th>
-                                                        <th>Price</th>
-                                                        <th>Quantity</th>
-                                                        <th>Amount</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="saleList"></tbody>
-                                            </table>
-                                            <div class="text-center">
-                                                <!--<button type="button" id="saveSales" class="btn btn-success">Save Sales</button>-->
-                                                <button id="calculateButton">Calculate Total</button>
-                                                <div id="totalAmountDisplay"></div>
-
-                                                <button type="button" id="saveExpenseBtn"> Save Expenses </button>
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><label style="font-size: 1em;" for="price" class="mb-2">Price:</label>
+                                                <span class="input-group-text">$</span></td>
+                                            <td><input type="number" id="price" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label style="font-size: 1em;" for="quantity" class="mb-2">Quantity:</label></td>
+                                            <td><input type="number" id="quantity" class="form-control" style="font-size: 1em; height: 30px;" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label style="font-size: 1em;" for="amount" class="mb-2">Amount:</label>
+                                                <span class="input-group-text">$</span></td>
+                                            <td><input type="number" id="amount" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
+                                        </tr>
+                                    </tbody>
+                                    <tr>
+                                        <td><button type="button" id="expenseSale" class="enhanced-button">Add Expense</button></td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <%
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } finally {
+                                if (rs != null) {
+                                    try {
+                                        rs.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (ps != null) {
+                                    try {
+                                        ps.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (cn != null) {
+                                    try {
+                                        cn.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                            %>
+                            <div class="col-md-6">
+                                <h2 class="h2-title">Expense Details</h2>
+                                <table id="expenseTable" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Item</th>
+                                            <th>ID</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="saleList"></tbody>
+                                </table>
+                                <div class="text-center">
+                                    <!--                                    <button id="calculateButton" class="btn btn-success">Calculate Total</button>-->
+                                    <div id="totalAmountDisplay"></div>
+                                    <br>
+                                    <button type="button" id="saveExpenseBtn" class="enhanced-button">Save Expenses</button>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
         </div>
 
-
         <script>
             const expenseArray = []; // Declare saleArray outside the event listener
 
             const expenseList = document.getElementById('expenseList');
             const expenseTable = document.getElementById('expenseTable');
+
+            // Event listener for expenseCategory dropdown change
+            document.getElementById('expensesCategory').addEventListener('change', function () {
+                const selectedCategory = this.value;
+                const itemForm = document.getElementById('rawMaterialsFields');
+
+                // Show itemForm for Raw Materials category, hide for others
+                if (selectedCategory === 'raw_materials') {
+                    itemForm.style.display = 'table-row';
+                } else {
+                    itemForm.style.display = 'none';
+                }
+            });
 
             document.getElementById('item').addEventListener('change', function () {
                 const selectedItem = this.options[this.selectedIndex];
@@ -362,15 +435,15 @@
                 };
 
                 // Add saleItem to the saleArray
-                saleArray.push(expenseItem);
-
+                expenseArray.push(expenseItem);
+                calculateTotal();
             });
 
             //calculate the total amount of sales
-            document.getElementById('calculateButton').addEventListener('click', function () {
+            function calculateTotal() {
                 // Calculate total amount
                 let totalAmount = 0;
-                saleArray.forEach(function (expenseItem) {
+                expenseArray.forEach(function (expenseItem) {
                     totalAmount += expenseItem.amount;
                 });
 
@@ -380,9 +453,7 @@
 
                 // Store totalAmount in session storage
                 sessionStorage.setItem('totalAmount', totalAmount);
-            });
-
-
+            }
 
             document.getElementById('saveExpenseBtn').addEventListener('click', function () {
                 saveExpenses();
@@ -396,6 +467,7 @@
                 });
 
                 const jsonData = JSON.stringify(expenseArray);
+                const expenseCategory = document.getElementById('expensesCategory').value; // Retrieve selected expense category
 
                 // Create a hidden input to hold the JSON data
                 const jsonInput = document.createElement("input");
@@ -409,12 +481,19 @@
                 totalAmountInput.name = "totalAmount";
                 totalAmountInput.value = totalAmount;
 
+                // Create a hidden input to hold the expense category
+                const categoryInput = document.createElement("input");
+                categoryInput.type = "hidden";
+                categoryInput.name = "expenseCategory";
+                categoryInput.value = expenseCategory;
+
                 // Create a form and append the inputs
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = "expensesList.jsp";
                 form.appendChild(jsonInput);
                 form.appendChild(totalAmountInput);
+                form.appendChild(categoryInput); // Append category input
 
                 // Append form to the document body and then submit
                 document.body.appendChild(form);
@@ -423,9 +502,7 @@
 
         </script>
 
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
     </body>
 </html>
-

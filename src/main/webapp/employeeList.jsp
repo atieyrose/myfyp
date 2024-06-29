@@ -75,6 +75,27 @@
                     padding: 8px;
                 }
             }
+             .enhanced-button {
+                display: inline-block;
+                padding: 15px 30px;
+                font-size: 16px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #fff;
+                background: #28a745;
+                border: none;
+                border-radius: 25px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+            .enhanced-button:hover {
+                background: #218838;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
         </style>
     </head>
     <body>
@@ -109,14 +130,15 @@
                     <% 
                 if ("manager".equals(role) || "clerk".equals(role)) { 
                 %>
-                <a href="employeeServlet?action=empnew" class="btn btn-success float-right">Add New Employee</a>
+                <button class="enhanced-button" onclick="window.location.href = 'employeeServlet?action=empnew'">Add New Employee</button>
                 <% } else { 
                 } %>
 
+                <br><br>
                     <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
                             <tr>
-                                <th>ID</th>
+                              
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Card ID</th>
@@ -132,7 +154,7 @@
                         <tbody>
                             <c:forEach var="employee" items="${listemployee}">
                                 <tr>
-                                    <td><c:out value="${employee.ID}" /></td>
+                                    
                                     <td><c:out value="${employee.firstName}" /></td>
                                     <td><c:out value="${employee.lastName}" /></td>
                                     <td><c:out value="${employee.cardID}" /></td>

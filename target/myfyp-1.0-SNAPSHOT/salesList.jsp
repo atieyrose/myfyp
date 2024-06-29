@@ -84,6 +84,33 @@
                 color: white;
                 text-decoration: none;
             }
+                    .enhanced-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            background: linear-gradient(45deg, #ff6b6b, #f06595);
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .enhanced-button:hover {
+            background: linear-gradient(45deg, #f06595, #ff6b6b);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .enhanced-button:active {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+        }
         </style>
     </head>
     <body>
@@ -107,7 +134,7 @@
                     Sales List
                 </h2>
                 <hr>
-                <a href="employeeServlet?action=empnew" class="btn btn-success float-right">Add New Sale</a>
+                <button class="enhanced-button" onclick="window.location.href='employeeServlet?action=empnew'">Add New Sale</button>
                 <br><br>
                 <table class="table table-striped table-bordered">
                     <thead class="thead-dark">

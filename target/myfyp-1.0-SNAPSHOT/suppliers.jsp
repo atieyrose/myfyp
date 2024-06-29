@@ -115,9 +115,17 @@
 
             <!-- Main -->
             <main class="main-container">
+                <c:if test="${suppliers == null}">
                 <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
                     Add New Supplier
                 </h2>
+                </c:if>
+                
+                <c:if test="${suppliers != null}">
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Update Supplier
+                </h2>
+                </c:if>
                 <hr>
 
                

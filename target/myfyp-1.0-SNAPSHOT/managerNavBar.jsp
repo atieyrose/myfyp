@@ -84,13 +84,13 @@
     // Map the current page with query parameters to the corresponding sidebar link ID
     var pageToLinkId = {
         "dashboard-link": ["managerDashboard.jsp"],
-        "employee-link": ["employeeServlet?action=emplist", "employeeServlet?action=empnew"],
+        "employee-link": ["employeeServlet?action=emplist", "employeeServlet?action=empnew", "employeeServlet?action=empedit"],
         "attendances-link": ["attendancesList.jsp"],
-        "customers-link": ["customersServlet?action=custlist", "customersServlet?action=custnew"],
-        "sales-link": ["processSales.jsp", "sales.jsp"],
-        "suppliers-link": ["suppliersServlet?action=suplist", "suppliersServlet?action=supnew"],
-        "expenses-link": ["expensesList.jsp", "expenses.jsp"],
-        "product-link": ["productsServlet?action=prodlist", "productsServlet?action=prodnew"],
+        "customers-link": ["customersServlet?action=custlist", "customersServlet?action=custnew", "customersServlet?action=custedit"],
+        "sales-link": ["processSales.jsp", "sales.jsp", "salesDetails.jsp"],
+        "suppliers-link": ["suppliersServlet?action=suplist", "suppliersServlet?action=supnew", "suppliersServlet?action=supedit"],
+        "expenses-link": ["expensesList.jsp", "expenses.jsp", "expenseDetails.jsp"],
+        "product-link": ["productsServlet?action=prodlist", "productsServlet?action=prodnew", "productsServlet?action=prodedit"],
         "logout-link": ["loginPage.jsp"]
     };
 

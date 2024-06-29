@@ -1,6 +1,6 @@
 <%-- 
-    Document   : salesDetails
-    Created on : 5 Jan 2024, 3:10:10 am
+    Document   : expenseDetails
+    Created on : 30 Jun 2024, 1:23:09 am
     Author     : A S U S
 --%>
 
@@ -15,7 +15,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sale Details</title>
+        <title>Expense Details</title>
         <!-- Bootstrap CSS -->
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
@@ -182,7 +182,7 @@
             <!-- Main -->
             <main class="main-container">
                 <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                    Sale Details
+                    Expense Details
                 </h2>
                 <hr>
 
@@ -193,27 +193,27 @@
 
 
                     <% 
-                        String saleid = request.getParameter("saleID");
-                        String custid = request.getParameter("custID");
+                        String expid = request.getParameter("expenseID");
+                        String supid = request.getParameter("supID");
                         int ID = 0;
-                        int cust = 0;
+                        int sup = 0;
 
                         // Check for null or empty parameters
-                        if (saleid != null && !saleid.isEmpty()) {
-                            ID = Integer.parseInt(saleid);
+                        if (expid != null && !expid.isEmpty()) {
+                            ID = Integer.parseInt(expid);
                         } else {
                             out.println("<p>Sale ID is missing!</p>");
                             return;
                         }
 
-                        if (custid != null && !custid.isEmpty()) {
-                            cust = Integer.parseInt(custid);
+                        if (supid != null && !supid.isEmpty()) {
+                            sup = Integer.parseInt(supid);
                         } else {
                             out.println("<p>Customer ID is missing!</p>");
                             return;
                         }
 
-                        String details = "SELECT si.prodID, si.quantity, si.total, p.prodName FROM sales_items si JOIN products p ON si.prodID = p.prodID WHERE saleID = ?";
+                        String details = "SELECT ei.prodID, ei.quantity, ei.total, p.prodName FROM expenses_items ei JOIN products p ON ei.prodID = p.prodID WHERE expID = ?";
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
@@ -248,10 +248,9 @@
                         out.println("<p>Error occurred while retrieving sales details: " + e.getMessage() + "</p>");
                     } %>
 
-                    <!-- Update Sales Button -->
-<!--                    <a href="updateSales.jsp?saleID=<%= ID %>&custID=<%= cust %>" class="btn btn-primary">Update Sales</a>-->
+                    <!-- Update Sales Button -->               
                 </div>
-            </main><!-- comment -->
+            </main>
         </div>
 
         <!-- Footer -->

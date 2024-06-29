@@ -28,6 +28,29 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Custom Styles -->
         <link rel="stylesheet" href="css/styles.css">
+        <style>
+                        .enhanced-button {
+                display: inline-block;
+                padding: 15px 30px;
+                font-size: 16px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #fff;
+                background: #28a745;
+                border: none;
+                border-radius: 25px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+            .enhanced-button:hover {
+                background: #218838;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
+        </style>
     </head>
     <body>
 
@@ -91,6 +114,8 @@
                     Dashboard
                 </h2>
                 <hr>
+                
+                   <button class="enhanced-button" onclick="window.location.href = 'sales.jsp'">Add New Sale</button>
                 <div class="main-cards">
                     <div class="card">
                         <div class="card-inner">
@@ -113,14 +138,8 @@
                         </div>
                         <span class="text-primary font-weight-bold">79</span>
                     </div>
-                    <div class="card">
-                        <div class="card-inner">
-                            <p class="text-primary">INVENTORY ALERTS</p>
-                            <span class="material-icons-outlined text-red">notification_important</span>
-                        </div>
-                        <span class="text-primary font-weight-bold">56</span>
-                    </div>
                 </div>
+                    
                 <div class="charts">
                     <div class="charts-card">
                         <p class="chart-title">Top 2 Products</p>

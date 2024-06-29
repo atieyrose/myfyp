@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Add New Employee</title>
+        <title>Employee</title>
         <!-- Bootstrap CSS -->
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
@@ -109,9 +109,17 @@
 
             <!-- Main -->
             <main class="main-container">
+                <c:if test="${employee == null}">
                 <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
                     Add New Employee
                 </h2>
+                </c:if>
+                
+                <c:if test="${employee != null}">
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Update Employee
+                </h2>
+                </c:if>
                 <hr>
 
 

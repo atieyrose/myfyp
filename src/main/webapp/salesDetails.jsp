@@ -213,7 +213,12 @@
                             return;
                         }
 
-                        String details = "SELECT si.prodID, si.quantity, si.total, p.prodName FROM sales_items si JOIN products p ON si.prodID = p.prodID WHERE saleID = ?";
+                        String details = "SELECT si.prodID, si.quantity, si.total, p.prodName, p.price, s.total AS saletotal " +
+                "FROM sales_items si " +
+                "JOIN products p ON si.prodID = p.prodID " +
+                "JOIN sales s ON si.saleID = s.saleID " +
+                "WHERE si.saleID = ?";
+
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
@@ -225,18 +230,32 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>Product Name</th>
+                                <th>Price (pcs)</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% while (rs.next()) { %>
+                            <% double saleTotal = 0.0;
+                            while (rs.next()) { String productName = rs.getString("prodName");
+                                double price = rs.getDouble("price");
+                                int quantity = rs.getInt("quantity");
+                                double total = rs.getDouble("total");
+            
+                            saleTotal += total;  %>
+
                             <tr>
-                                <td><%= rs.getString("prodName") %></td>
-                                <td><%= rs.getInt("quantity") %></td>
-                                <td><%= rs.getDouble("total") %></td>
+                                <td><%= productName %></td>
+                                <td>RM<%= price %></td>
+                                <td><%= quantity %></td>
+                                <td>RM<%= total %></td>
                             </tr>
                             <% } %>
+                            <tr><td></td></tr>
+                            <tr>
+                                <th>Sale Total</th>
+                                <td colspan="3">RM<%= saleTotal %></td>
+                            </tr>
                         </tbody>
                     </table>
                     <% 
@@ -251,6 +270,7 @@
                     <!-- Update Sales Button -->
 <!--                    <a href="updateSales.jsp?saleID=<%= ID %>&custID=<%= cust %>" class="btn btn-primary">Update Sales</a>-->
                 </div>
+                 <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main><!-- comment -->
         </div>
 

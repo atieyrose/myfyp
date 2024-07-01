@@ -16,6 +16,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Add New Sale</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
@@ -189,123 +190,50 @@
 
 
 
-                
-                    <div class="card">
-                       
 
-                            <%
-                         Connection cn = null;
-                         PreparedStatement ps = null;
-                         ResultSet rs = null;
+                <div class="card">
 
-                         String url = "jdbc:mysql://localhost:3306/fyp";
-                         String user = "root";
-                         String pass = "admin";
 
-                         try {
-                             Class.forName("com.mysql.cj.jdbc.Driver");
-                             cn = DriverManager.getConnection(url, user, pass);
+                    <%
+                 Connection cn = null;
+                 PreparedStatement ps = null;
+                 ResultSet rs = null;
 
-                             String customerQuery = "SELECT custID, firstName, lastName FROM customers";
-                             ps = cn.prepareStatement(customerQuery);
-                             rs = ps.executeQuery();
+                 String url = "jdbc:mysql://localhost:3306/fyp";
+                 String user = "root";
+                 String pass = "admin";
+
+                 try {
+                     Class.forName("com.mysql.cj.jdbc.Driver");
+                     cn = DriverManager.getConnection(url, user, pass);
+
+                     String customerQuery = "SELECT custID, firstName, lastName FROM customers";
+                     ps = cn.prepareStatement(customerQuery);
+                     rs = ps.executeQuery();
                             
 
-                            %>
-                            <form id="salesForm"  method="post">
-                                <table class="form-table">
-                                    <tr>
-                                        <td><label for="customerDropdown" style="font-size: 1em;">Select a Customer:</label></td>
-                                        <td>
-                                            <select name="customerDropdown" id="customerDropdown" style="font-size: 1em; height: 30px;">
-                                                <option value="">-- Select a Customer --</option>
-                                                <% while (rs.next()) { %>
-                                                <option value="<%= rs.getInt("custID") %>">
-                                                    <%= rs.getString("firstName") %> <%= rs.getString("lastName") %>
-                                                </option>
-                                                <% } %>
-                                            </select> 
-                                        </td><!-- comment -->
-                                    </tr>
+                    %>
+                    <form id="salesForm"  method="post">
+                        <table class="form-table">
+                            <tr>
+                                <td><label for="customerDropdown" style="font-size: 1em;">Select a Customer:</label></td>
+                                <td>
+                                    <select name="customerDropdown" id="customerDropdown" style="font-size: 1em; height: 30px;">
+                                        <option value="">-- Select a Customer --</option>
+                                        <% while (rs.next()) { %>
+                                        <option value="<%= rs.getInt("custID") %>">
+                                            <%= rs.getString("firstName") %> <%= rs.getString("lastName") %>
+                                        </option>
+                                        <% } %>
+                                    </select> 
+                                </td><!-- comment -->
+                            </tr>
 
 
-
-                                    <%
-                        
-                                        } catch (SQLException | ClassNotFoundException e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            if (rs != null) {
-                                                try {
-                                                    rs.close();
-                                                } catch (SQLException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            if (ps != null) {
-                                                try {
-                                                    ps.close();
-                                                } catch (SQLException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            if (cn != null) {
-                                                try {
-                                                    cn.close();
-                                                } catch (SQLException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-                                    %>
-
-                                    <%
-                                        try {
-                                            cn = DriverManager.getConnection(url, user, pass);
-                                            String p = "SELECT prodID, prodName, price FROM products";
-                                            ps = cn.prepareStatement(p);
-                                            rs = ps.executeQuery();
-                                    %>
-
-
-
-                                    <tr>
-                                        <td><label for="item" style="font-size: 1em;">Item:</label></td>
-                                        <td><select id="item" style="font-size: 1em; height: 30px;" required>
-                                                <option value="">-- Select an Item --</option>
-                                                <% while (rs.next()) { %>
-                                                <option value="<%= rs.getInt("prodID") %>" data-price="<%= rs.getDouble("price") %>">
-                                                    <%= rs.getString("prodName") %>
-                                                </option>
-                                                <% } %>
-                                            </select></td>
-                                    </tr>
-
-
-                                    <tr>
-                                        <td><label for="price" style="font-size: 1em;">Price:</label>
-                                            <span class="input-group-text">$</span></td>
-                                        <td><input type="number" id="price" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
-                                    </tr>
-
-                                    <tr>
-
-                                        <td><label for="quantity" style="font-size: 1em;">Quantity:</label></td>
-                                        <td><input type="number" id="quantity" class="form-control" style="font-size: 1em; height: 30px;" required></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="amount" style="font-size: 1em;">Amount:</label>
-                                            <span class="input-group-text">$</span></td>
-                                        <td><input type="number" id="amount" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
-                                    </tr>
-                                    <tr>
-                                        <td><button class="enhanced-button" type="button" id="addSale">Add Sale</button></td>
-                                    </tr>
-                                </table>
-                            </form>
 
                             <%
-                                } catch (SQLException e) {
+                        
+                                } catch (SQLException | ClassNotFoundException e) {
                                     e.printStackTrace();
                                 } finally {
                                     if (rs != null) {
@@ -331,34 +259,107 @@
                                     }
                                 }
                             %>
-                            <div class="col-md-6">
-                                <h2 class="h2-title">Sale Details</h2>
-                                <table id="saleTable" class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Item</th>
-                                            <th>ID</th>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="saleList"></tbody>
-                                </table>
-                                <div class="text-center">
-                                    <!--<button type="button" id="saveSales" class="btn btn-success">Save Sales</button>-->
-<!--                                    <button id="calculateButton">Calculate Total</button>-->
-                                    <div id="totalAmountDisplay"></div>
-                                    <br>
 
-                                    <button class="enhanced-button" type="button" id="saveSalesBtn"> Save Sales </button>
+                            <%
+                                try {
+                                    cn = DriverManager.getConnection(url, user, pass);
+                                    String p = "SELECT prodID, prodName, price FROM products";
+                                    ps = cn.prepareStatement(p);
+                                    rs = ps.executeQuery();
+                            %>
 
-                                </div>
-                            </div>
+
+
+                            <tr>
+                                <td><label for="item" style="font-size: 1em;">Item:</label></td>
+                                <td><select id="item" style="font-size: 1em; height: 30px;" required>
+                                        <option value="">-- Select an Item --</option>
+                                        <% while (rs.next()) { %>
+                                        <option value="<%= rs.getInt("prodID") %>" data-price="<%= rs.getDouble("price") %>">
+                                            <%= rs.getString("prodName") %>
+                                        </option>
+                                        <% } %>
+                                    </select></td>
+                            </tr>
+
+
+                            <tr>
+                                <td><label for="price" style="font-size: 1em;">Price:</label>
+                                    <span class="input-group-text">$</span></td>
+                                <td><input type="number" id="price" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
+                            </tr>
+
+                            <tr>
+
+                                <td><label for="quantity" style="font-size: 1em;">Quantity:</label></td>
+                                <td><input type="number" id="quantity" class="form-control" placeholder="eg: 10" style="font-size: 1em; height: 30px;" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="amount" style="font-size: 1em;">Amount:</label>
+                                    <span class="input-group-text">$</span></td>
+                                <td><input type="number" id="amount" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
+                            </tr>
+                            <tr>
+                                <td><button class="enhanced-button" type="button" id="addSale">Add Sale</button></td>
+                            </tr>
+                        </table>
+                    </form>
+
+                    <%
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (rs != null) {
+                                try {
+                                    rs.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if (ps != null) {
+                                try {
+                                    ps.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if (cn != null) {
+                                try {
+                                    cn.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    %>
+                    <div class="col-md-6">
+                        <h2 class="h2-title">Sale Details</h2>
+                        <table id="saleTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Item</th>
+                                    <th>ID</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="saleList"></tbody>
+                        </table>
+                        <div class="text-center">
+                            <!--<button type="button" id="saveSales" class="btn btn-success">Save Sales</button>-->
+                            <!--                                    <button id="calculateButton">Calculate Total</button>-->
+                            <div id="totalAmountDisplay"></div>
+                            <br>
+
+                            <button class="enhanced-button" type="button" id="saveSalesBtn"> Save Sales </button>
+
                         </div>
-                 
-             
+                    </div>
+                </div>
+
+
             </main>
         </div>
 

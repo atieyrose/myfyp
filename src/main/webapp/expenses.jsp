@@ -16,6 +16,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Add New Expense</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -92,11 +93,11 @@
                 width: 1000px; /* Adjust the width as needed */
             }
             table.form-table {
-                width: 45%;
+                width: 37%;
                 border-collapse: collapse;
             }
             table.form-table td {
-                width: 33%;
+                width: 21%;
                 padding: 10px;
             }
 
@@ -106,7 +107,7 @@
                 width: 100%;
                 box-sizing: border-box;
             }
-            
+
             /* Horizontal Pagination */
             .pagination {
                 display: flex;
@@ -234,75 +235,91 @@
                                                 <% } %>
                                             </select></td>
                                     </tr>
+                                </table>
 
 
-                                    <%
-                                    } catch (SQLException | ClassNotFoundException e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        if (rs != null) {
-                                            try {
-                                                rs.close();
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        if (ps != null) {
-                                            try {
-                                                ps.close();
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        if (cn != null) {
-                                            try {
-                                                cn.close();
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            }
+                                <%
+                                } catch (SQLException | ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    if (rs != null) {
+                                        try {
+                                            rs.close();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
                                         }
                                     }
-                                    %>
+                                    if (ps != null) {
+                                        try {
+                                            ps.close();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    if (cn != null) {
+                                        try {
+                                            cn.close();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                %>
 
-                                    <%
-                                    try {
-                                        cn = DriverManager.getConnection(url, user, pass);
-                                        String p = "SELECT prodID, prodName, price FROM products";
-                                        ps = cn.prepareStatement(p);
-                                        rs = ps.executeQuery();
-                                    %>
-                                    <!-- Dynamic item selection form for Raw Materials -->
-                                    <tbody id="rawMaterialsFields" class="form-table" style="display: none;">
-                                        <tr>
-                                            <td><label style="font-size: 1em; " for="item" class="mb-2">Item:</label></td>
-                                            <td>
-                                                <select id="item" class="form-control" style="font-size: 1em; height: 30px;" required>
-                                                    <option value="">-- Select an Item --</option>
-                                                    <% while (rs.next()) { %>
-                                                    <option value="<%= rs.getInt("prodID") %>" data-price="<%= rs.getDouble("price") %>">
-                                                        <%= rs.getString("prodName") %>
-                                                    </option>
-                                                    <% } %>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><label style="font-size: 1em;" for="price" class="mb-2">Price:</label>
-                                                <span class="input-group-text">$</span></td>
-                                            <td><input type="number" id="price" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
-                                        </tr>
-                                        <tr>
-                                            <td><label style="font-size: 1em;" for="quantity" class="mb-2">Quantity:</label></td>
-                                            <td><input type="number" id="quantity" class="form-control" style="font-size: 1em; height: 30px;" required></td>
-                                        </tr>
-                                        <tr>
-                                            <td><label style="font-size: 1em;" for="amount" class="mb-2">Amount:</label>
-                                                <span class="input-group-text">$</span></td>
-                                            <td><input type="number" id="amount" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
-                                        </tr>
-                                    </tbody>
+                                <%
+                                try {
+                                    cn = DriverManager.getConnection(url, user, pass);
+                                    String p = "SELECT prodID, prodName, price FROM products";
+                                    ps = cn.prepareStatement(p);
+                                    rs = ps.executeQuery();
+                                %>
+                                <!-- Dynamic item selection form for Raw Materials -->
+                                <table class="form-table" id="rawMaterialsFields" style="display: none;">
+                                    <tr>
+                                        <td><label style="font-size: 1em; " for="item" class="mb-2">Item:</label></td>
+                                        <td>
+                                            <select id="item" class="form-control" style="font-size: 1em; height: 30px;" required>
+                                                <option value="">-- Select an Item --</option>
+                                                <% while (rs.next()) { %>
+                                                <option value="<%= rs.getInt("prodID") %>" data-price="<%= rs.getDouble("price") %>">
+                                                    <%= rs.getString("prodName") %>
+                                                </option>
+                                                <% } %>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label style="font-size: 1em;" for="price" class="mb-2">Price:</label>
+                                            <span class="input-group-text">$</span></td>
+                                        <td><input type="number" id="price" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label style="font-size: 1em;" for="quantity" class="mb-2">Quantity:</label></td>
+                                        <td><input type="number" id="quantity" class="form-control" placeholder="eg: 10" style="font-size: 1em; height: 30px;" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label style="font-size: 1em;" for="amount" class="mb-2">Amount:</label>
+                                            <span class="input-group-text">$</span></td>
+                                        <td><input type="number" id="amount" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required readonly></td>
+                                    </tr>
                                     <tr>
                                         <td><button type="button" id="expenseSale" class="enhanced-button">Add Expense</button></td>
+                                    </tr>
+                                </table>
+
+
+
+
+                                <!-- Dynamic item selection form for Raw Materials -->
+                                <table class="form-table" id="utilitiesFields" style="display: none;">
+                                    <tr>
+                                        <td><label style="font-size: 1em;" for="amount" class="mb-2">Amount:</label>
+                                            <span class="input-group-text">$</span></td>
+                                        <td><input type="number" id="amount2" class="form-control" step="0.01" style="font-size: 1em; height: 30px;" required></td>
+                                    </tr>
+                                    </tbody>
+                                    <tr>
+                                        <td><button type="button" id="expenseUti" class="enhanced-button">Add Expense</button></td>
                                     </tr>
                                 </table>
                             </form>
@@ -333,7 +350,7 @@
                                 }
                             }
                             %>
-                            <div class="col-md-6">
+                            <div class="col-md-6" id="expenseDetails" style="display: none;">
                                 <h2 class="h2-title">Expense Details</h2>
                                 <table id="expenseTable" class="table">
                                     <thead>
@@ -355,9 +372,31 @@
                                     <button type="button" id="saveExpenseBtn" class="enhanced-button">Save Expenses</button>
                                 </div>
                             </div>
+
+                            <div class="col-md-6" id="utilitiesDetails" style="display: none;">
+                                <h2 class="h2-title">Expense Details</h2>
+                                <table id="utilitiesTable" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Supplier</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="saleList"></tbody>
+                                </table>
+                                <div class="text-center">
+                                    <!--                                    <button id="calculateButton" class="btn btn-success">Calculate Total</button>-->
+                                    <div id="totalAmountDisplay"></div>
+                                    <br>
+                                    <button type="button" id="saveUtil" class="enhanced-button">Save Expenses</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
         </div>
 
@@ -370,15 +409,40 @@
             // Event listener for expenseCategory dropdown change
             document.getElementById('expensesCategory').addEventListener('change', function () {
                 const selectedCategory = this.value;
-                const itemForm = document.getElementById('rawMaterialsFields');
+                const rawMaterialsForm = document.getElementById('rawMaterialsFields');
+                const utilitiesForm = document.getElementById('utilitiesFields');
 
-                // Show itemForm for Raw Materials category, hide for others
+                // Hide both forms initially
+                rawMaterialsForm.style.display = 'none';
+                utilitiesForm.style.display = 'none';
+
+                // Show the appropriate form based on the selected category
                 if (selectedCategory === 'raw_materials') {
-                    itemForm.style.display = 'table-row';
-                } else {
-                    itemForm.style.display = 'none';
+                    rawMaterialsForm.style.display = 'table-row';
+                } else if (selectedCategory === 'utilities') {
+                    utilitiesForm.style.display = 'table-row';
                 }
             });
+
+// Event listener for expenseCategory dropdown change
+            document.getElementById('expensesCategory').addEventListener('change', function () {
+                const selectedCategory = this.value;
+                const expenseDetails = document.getElementById('expenseDetails');
+                const utilitiesTable = document.getElementById('utilitiesDetails'); // Assuming utilitiesTable is your table for utilities
+
+                // Show or hide expenseDetails based on selectedCategory
+                if (selectedCategory === 'raw_materials') {
+                    expenseDetails.style.display = 'block'; // Show expenseDetails for Raw Materials
+                    utilitiesTable.style.display = 'none'; // Hide utilitiesTable for Raw Materials
+                } else if (selectedCategory === 'utilities') {
+                    expenseDetails.style.display = 'none'; // Hide expenseDetails for Utilities
+                    utilitiesTable.style.display = 'table-row-group'; // Show utilitiesTable for Utilities
+                } else {
+                    expenseDetails.style.display = 'none'; // Hide expenseDetails for other categories
+                    utilitiesTable.style.display = 'none'; // Hide utilitiesTable for other categories
+                }
+            });
+
 
             document.getElementById('item').addEventListener('change', function () {
                 const selectedItem = this.options[this.selectedIndex];
@@ -439,6 +503,41 @@
                 calculateTotal();
             });
 
+            let utiNo = 1;
+            document.getElementById('expenseUti').addEventListener('click', function () {
+                const selectedCategory = document.getElementById('expensesCategory').value;
+
+                // Check if the selected category is utilities
+                if (selectedCategory === 'utilities') {
+                    var amountStr = document.getElementById('amount2').value;
+                    var amount = parseFloat(amountStr);
+
+
+
+                    // Insert new row into utilitiesFields table
+                    const newRow = document.getElementById('utilitiesTable').insertRow();
+                    const cell1 = newRow.insertCell(0);
+                    const cell2 = newRow.insertCell(1);
+                    const cell3 = newRow.insertCell(2);
+
+                    // Add data to the new row
+                    cell1.textContent = utiNo++;
+                    cell2.textContent = 'Utilities'; // Example text for item name in utilities category
+                    cell3.textContent = '$' + amount.toFixed(2); // Display amount
+
+                    // Clear the amount field
+                    document.getElementById('amount2').value = '';
+
+                    // Optionally, you can add the expenseItem to expenseArray and call calculateTotal()
+                    // However, this depends on how you want to handle the data for utilities
+
+                    // For now, we assume you do not need to store the data for utilities
+
+                    // Hide the utilitiesFields table after adding the expense (optional)
+                    //document.getElementById('utilitiesFields').style.display = 'none';
+                }
+            });
+
             //calculate the total amount of sales
             function calculateTotal() {
                 // Calculate total amount
@@ -494,6 +593,61 @@
                 form.appendChild(jsonInput);
                 form.appendChild(totalAmountInput);
                 form.appendChild(categoryInput); // Append category input
+
+                // Append form to the document body and then submit
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+            document.getElementById('saveUtil').addEventListener('click', function () {
+                saveUtilities();
+            });
+
+            function saveUtilities() {
+                // Calculate total amount
+                let totalAmount = 0;
+                const tableRows = document.querySelectorAll('#utilitiesTable tbody tr');
+                tableRows.forEach(function (row, index) {
+                    let amountCell = row.querySelector('td:nth-child(3)');
+                    let amount = parseFloat(amountCell.textContent.replace('$', '').trim());
+                    totalAmount += amount;
+                });
+
+                // Create an array to hold utility details
+                let utilityArray = [];
+                tableRows.forEach(function (row, index) {
+                    let supplierCell = row.querySelector('td:nth-child(2)');
+                    let amountCell = row.querySelector('td:nth-child(3)');
+
+                    let utilityItem = {
+                        no: index + 1,
+                        supplier: supplierCell.textContent.trim(),
+                        amount: parseFloat(amountCell.textContent.replace('$', '').trim())
+                    };
+
+                    utilityArray.push(utilityItem);
+                });
+
+                const jsonData = JSON.stringify(utilityArray);
+
+                // Create a hidden input to hold the JSON data
+                const jsonInput = document.createElement("input");
+                jsonInput.type = "hidden";
+                jsonInput.name = "utilityListJSON";
+                jsonInput.value = jsonData;
+
+                // Create a hidden input to hold the totalAmount
+                const totalAmountInput = document.createElement("input");
+                totalAmountInput.type = "hidden";
+                totalAmountInput.name = "totalAmount";
+                totalAmountInput.value = totalAmount.toFixed(2); // Format total amount to 2 decimal places
+
+                // Create a form and append the inputs
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "expensesList.jsp"; // Adjust the action URL as per your requirement
+                form.appendChild(jsonInput);
+                form.appendChild(totalAmountInput);
 
                 // Append form to the document body and then submit
                 document.body.appendChild(form);

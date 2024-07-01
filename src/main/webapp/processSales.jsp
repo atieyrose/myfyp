@@ -15,6 +15,8 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="org.json.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import= "java.text.ParseException" %>
+<%@ page import= "java.util.Date" %>
 <%@page session="true" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +24,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sales List</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Montserrat Font -->
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
         <!-- Material Icons -->
@@ -225,11 +228,11 @@
                     c.setAutoCommit(false);
 
                     // Debug statement to check if the database connection is successful
-                    if (c != null) {
-                        out.println("<p> Database connection successful! </p>");
-                    } else {
-                        out.println("<p> Database connection failed! </p>");
-                    }
+//                    if (c != null) {
+//                        out.println("<p> Database connection successful! </p>");
+//                    } else {
+//                        out.println("<p> Database connection failed! </p>");
+//                    }
 
                     // Get JSON data from request parameter
                     String jsonData = request.getParameter("saleListJSON");
@@ -240,13 +243,13 @@
                         String totalAmountParam = request.getParameter("totalAmount");
                         if (totalAmountParam != null) {
                             double totalAmount = Double.parseDouble(totalAmountParam);
-                            out.println("Total Amount received: $" + totalAmount);
+//                            out.println("Total Amount received: $" + totalAmount);
 
                             JSONObject firstSaleItem = saleList.getJSONObject(0);
                             int customerId = firstSaleItem.getInt("custID");
                             double a = totalAmount;
 
-                            out.println(customerId);
+//                            out.println(customerId);
                             // Insert sales data into the sales table
                             String insertSales = "INSERT INTO sales (custID, total, date) VALUES (?, ?, CURDATE())";
                             pSales = c.prepareStatement(insertSales, Statement.RETURN_GENERATED_KEYS);
@@ -302,7 +305,7 @@
                     <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
                             <tr>
-                             
+
                                 <th>Customer Name</th>
                                 <th>Total</th>
                                 <th>Date</th>
@@ -318,12 +321,19 @@
                                 String custLast = rSales.getString("lastName");
                                 double total = rSales.getDouble("total");
                                 Date date = rSales.getDate("date");
+                              
+
+                            // Define the new format
+                            SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+                            // Format the Date object to the new format
+                            String newDateStr = newFormat.format(date);
                             %>
                             <tr>
-                           
+
                                 <td><%= custName %> <%= custLast %></td>
-                                <td><%= total %></td>
-                                <td><%= date %></td>
+                                <td>RM<%= total %></td>
+                                <td><%= newDateStr %></td>
                                 <td><a href="salesDetails.jsp?saleID=<%= saleid %>&custID=<%= custid %>">Details</a></td>
 
                             </tr>
@@ -404,10 +414,11 @@
                     }
                 }
                 %>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
         </div>
 
-    <!-- Custom JS -->
-    <script src="js/scripts.js"></script>
-</body>
+        <!-- Custom JS -->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>

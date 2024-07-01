@@ -213,7 +213,8 @@
                             return;
                         }
 
-                        String details = "SELECT ei.prodID, ei.quantity, ei.total, p.prodName FROM expenses_items ei JOIN products p ON ei.prodID = p.prodID WHERE expID = ?";
+                        String details = "SELECT ei.prodID, ei.quantity, ei.total, p.prodName, p.price, e.total AS exptotal FROM expenses_items ei JOIN products p ON ei.prodID = p.prodID " 
+                                + "JOIN expenses e ON ei.expID = e.expID WHERE ei.expID = ?";
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
@@ -225,18 +226,32 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>Product Name</th>
+                                <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% while (rs.next()) { %>
+                            <% double expTotal = 0.0;
+                            while (rs.next()) { String productName = rs.getString("prodName");
+                                double price = rs.getDouble("price");
+                                int quantity = rs.getInt("quantity");
+                                double total = rs.getDouble("total");
+            
+                            expTotal += total;  %>
+
                             <tr>
-                                <td><%= rs.getString("prodName") %></td>
-                                <td><%= rs.getInt("quantity") %></td>
-                                <td><%= rs.getDouble("total") %></td>
+                                <td><%= productName %></td>
+                                <td>RM<%= price %></td>
+                                <td><%= quantity %></td>
+                                <td>RM<%= total %></td>
                             </tr>
                             <% } %>
+                            <tr><td></td></tr>
+                            <tr>
+                                <th>Sale Total</th>
+                                <td colspan="3">RM<%= expTotal %></td>
+                            </tr>
                         </tbody>
                     </table>
                     <% 
@@ -250,6 +265,7 @@
 
                     <!-- Update Sales Button -->               
                 </div>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
         </div>
 

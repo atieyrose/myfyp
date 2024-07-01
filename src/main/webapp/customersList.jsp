@@ -15,6 +15,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Customers List</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
 
         <% String fname = (String) session.getAttribute("firstName"); %>
@@ -153,7 +154,7 @@
                 <table class="table table-striped table-bordered">
                     <thead class="thead-dark">
                         <tr>
-                            
+
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Phone Number</th>
@@ -165,7 +166,7 @@
                     <tbody>
                         <c:forEach var="customers" items="${listcustomers}">
                             <tr>
-                         
+
                                 <td><c:out value="${customers.firstName}" /></td>
                                 <td><c:out value="${customers.lastName}" /></td>
                                 <td><c:out value="${customers.phoneNo}" /></td>
@@ -180,10 +181,7 @@
                         </c:forEach>
                     </tbody>
                 </table>
-
-
-
-
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
             <!-- End Main -->
         </div>

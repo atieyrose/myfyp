@@ -1,201 +1,357 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page session="true" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Attendance List</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add New Sale</title>
+        <!-- Bootstrap CSS -->
+        <% String fname = (String) session.getAttribute("firstName"); %>
+        <% String id = (String) session.getAttribute("username"); %>
+        <!-- Montserrat Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Material Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+        <!-- Custom Styles -->
+        <link rel="stylesheet" href="css/styles.css">
         <style>
             body {
-                background-color: #f8f9fa;
+                font-family: 'Montserrat', sans-serif;
             }
-
-            .container {
-                max-width: 1100px;
-                background-color: #ffffff;
-                padding: 20px;
+            .table-container {
                 margin: 20px auto;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+                padding: 20px;
                 border-radius: 10px;
-            }
-
-            h2 {
-                text-align: center;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
             }
             .table {
-                background-color: #ffffff;
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
             }
-
-            .table th {
-                background-color: #999999;
-                color: #ffffff;
-            }
-
-            .table td, .table th {
-                border: 1px solid #dee2e6;
+            .table th, .table td {
                 padding: 12px;
-                text-align: center;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
             }
-
-            .table a {
+            .table thead th {
+                background-color: #333;
+                color: #fff;
+                text-transform: uppercase;
+            }
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 5px 0;
                 text-decoration: none;
-                margin-right: 10px;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+            .btn-warning {
+                background-color: #f0ad4e;
+                color: #fff;
+            }
+            .btn-warning:hover {
+                background-color: #ec971f;
+            }
+            .btn-danger {
+                background-color: #d9534f;
+                color: #fff;
+            }
+            .btn-danger:hover {
+                background-color: #c9302c;
+            }
+            @media (max-width: 768px) {
+                .table-container {
+                    padding: 10px;
+                }
+                .table th, .table td {
+                    padding: 8px;
+                }
             }
 
-            .table a:hover {
-                text-decoration: underline;
+            .fieldset-spacing {
+                margin-bottom: 10px; /* Adjust the value as needed */
+            }
+
+            .input-size {
+                width: 1000px; /* Adjust the width as needed */
+            }
+            table.form-table {
+                width: 45%;
+                border-collapse: collapse;
+            }
+            table.form-table td {
+                width: 33%;
+                padding: 10px;
+            }
+            table.form-table input,
+            table.form-table select,
+            table.form-table button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            /* Horizontal Pagination */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                list-style: none;
+                padding: 0;
+            }
+            .page-item {
+                margin: 0 5px;
+            }
+            .page-link {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            .page-link:hover {
+                background-color: #f1f1f1;
+                color: #333;
+            }
+            .page-item.active .page-link {
+                background-color: #333;
+                color: #fff;
+            }
+            .page-item.disabled .page-link {
+                color: #ddd;
+                pointer-events: none;
+            }
+            .enhanced-button {
+                display: inline-block;
+                padding: 15px 20px;
+                font-size: 15px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #fff;
+                background: #28a745;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+            .enhanced-button:hover {
+                background: #218838;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             }
         </style>
     </head>
     <body>
-        <jsp:include page="header.jsp"/>
-        <%
-        String role = (String) session.getAttribute("role");
-        String uid = (String) session.getAttribute("uid");
+        <div class="grid-container">
+            <!-- Header -->
+            <header class="header">
+                <h2>JERNIH TILING ENT</h2>
+            </header>
+            <!-- End Header -->
 
-        if ("manager".equals(role)) { 
-        %>
-        <jsp:include page="managerNavBar.jsp"/>
-        <% 
-        } else if ("clerk".equals(role)) { 
-        %>
-        <jsp:include page="clerkNavBar.jsp"/> 
-        <% 
-        } else { 
-        %>
-        <jsp:include page="staffNavBar.jsp"/>
-        <% 
-        } 
-        %>
-
-        <br>
-        
-        <div class="container">
-            <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                Attendances List
-            </h2>
-            <hr>
-            <br><br><!-- comment -->
-            
+            <!-- Sidebar -->
             <%
-            Connection c = null;
-            PreparedStatement ps = null;
-            ResultSet r = null;
-            
-            int rowsPerPage = 15; // Number of rows per page
-            int currentPage = 1; // Default current page
-
-            // Get current page from request parameter
-            String pageStr = request.getParameter("page");
-            if (pageStr != null && !pageStr.isEmpty()) {
-                currentPage = Integer.parseInt(pageStr);
-            }
-            int startRow = (currentPage - 1) * rowsPerPage;
-
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                c = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
-
-                String attshow = "SELECT a.attendID, a.UID, a.date, a.day, a.clockin, a.clockout, a.duration, e.firstName, e.ID " +
-                                 "FROM attendances a JOIN employee e ON a.UID = e.cardID " +
-                                 "WHERE a.UID = ? LIMIT ?, ?";
-                ps = c.prepareStatement(attshow);
-                ps.setString(1, uid);
-                ps.setInt(2, startRow);
-                ps.setInt(3, rowsPerPage);
-                r = ps.executeQuery();
+            String role= (String) session.getAttribute("role");
             %>
-            <div class="center-table">
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Employee ID</th>
-                            <th>Date</th>
-                            <th>Day</th>
-                            <th>Clock IN</th>
-                            <th>Clock OUT</th>
-                            <th>Duration (H)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                    while (r.next()) {
-                        Date dateObj = r.getDate("date");
-                        String formattedDate = (dateObj != null) ? new SimpleDateFormat("d MMM yyyy").format(dateObj) : "";
 
-                        String day = r.getString("day");
+            <% if ("manager".equals(role)) { %>
+            <jsp:include page="managerNavBar.jsp"/>
+            <% } else if ("clerk".equals(role)) { %>
+            <jsp:include page="clerkNavBar.jsp"/>
+            <% } else { %>
+            <jsp:include page="staffNavBar.jsp"/>
+            <% } %>
 
-                        Time clockinTime = r.getTime("clockin");
-                        String formattedClockin = (clockinTime != null) ? new SimpleDateFormat("h:mm a").format(clockinTime) : "";
+            <!-- End Sidebar -->
 
-                        Time clockoutTime = r.getTime("clockout");
-                        String formattedClockout = (clockoutTime != null) ? new SimpleDateFormat("h:mm a").format(clockoutTime) : "";
-
-                        String duration = r.getString("duration");
-                        if (duration == null) {
-                            duration = "-";
+            <!-- Main -->
+            <main class="main-container">
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Attendances
+                </h2>
+                <hr>
+                <% 
+                    String uid = null;
+                    String selectedMonth = request.getParameter("month");
+                        if (selectedMonth == null || selectedMonth.isEmpty()) {
+                            // Default to the current month if no month is selected
+                            Calendar cal = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+                            selectedMonth = sdf.format(cal.getTime());
                         }
-                    %>
-                        <tr>
-                            <td><%= uid %></td>
-                            <td><%= formattedDate %></td>
-                            <td><%= day %></td>
-                            <td><%= formattedClockin %></td>
-                            <td><%= formattedClockout %></td>
-                            <td><%= duration %></td>
-                        </tr>
+                %>
+
+
+
+
+
+
+                <div class="card">
                     <%
-                    }
+                    Connection c = null;
+                        PreparedStatement ps = null;
+                        ResultSet r = null;
+                        int totalDays = 0;
+                        int totalHours = 0;
+                        int maxHoursInDay = 0;
+                        List<String> dates = new ArrayList<>();
+                        List<Integer> durations = new ArrayList<>();
+                        
+                    
+                    try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    c = DriverManager.getConnection("jdbc:mysql://localhost:3306/fyp", "root", "admin");
+                      
+                        
+                        String qr = "SELECT cardID FROM employee WHERE ID = ?";
+                        ps = c.prepareStatement(qr);
+                        ps.setString(1, id);
+                        r = ps.executeQuery();
+                        
+                        if (r.next()) {
+                         uid = r.getString("cardID");
+                        }
+                        
                     %>
-                    </tbody>
-                </table>
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item <%= (currentPage == 1) ? "disabled" : "" %>">
-                            <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
-                        </li>
-                        <li class="page-item <%= (r.next()) ? "" : "disabled" %>">
-                            <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <%
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                if (r != null) {
-                    try {
-                        r.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (ps != null) {
-                    try {
-                        ps.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (c != null) {
-                    try {
-                        c.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            %>
-        </div>
+                    <form method="get" action="attendancesListStaff.jsp">
+                        <div class="form-group">
+                            <label for="month">Select Month:</label>
+                            <input type="month" id="month" name="month" class="form-control" value="<%= selectedMonth %>">
+                        </div>
+                        <input type="hidden" name="uid" value="<%= uid %>">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+                    <hr>
+                    <%
+                        
+                   String att = "SELECT SUM(duration) as total_hours, COUNT(*) as total_days, MAX(duration) as max_hours_in_day FROM attendances WHERE UID = ? AND DATE_FORMAT(date, '%Y-%m') = ?";
+                        ps = c.prepareStatement(att);
+                        ps.setString(1, uid);
+                        ps.setString(2, selectedMonth);
+                        r = ps.executeQuery();
+
+                        if (r.next()) {
+                            totalDays = r.getInt("total_days");
+                            totalHours = r.getInt("total_hours");
+                            maxHoursInDay = r.getInt("max_hours_in_day");
+                        }
+                
+                        String showatt = "SELECT date, day, clockin, clockout, duration FROM attendances WHERE UID = ? AND DATE_FORMAT(date, '%Y-%m') = ? ORDER BY date DESC";
+                        ps = c.prepareStatement(showatt, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                        ps.setString(1, uid);
+                        ps.setString(2, selectedMonth);
+                        r = ps.executeQuery();
+                    %>
+
+                    <div class="center-table">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Clock IN</th>
+                                    <th>Clock OUT</th>
+                                    <th>Duration (H)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% while (r.next()) {
+                        
+                                    Date dateObj = r.getDate("date");
+                                    String formattedDate = "";
+                                    if (dateObj != null) {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy");
+                                        formattedDate = sdf.format(dateObj);
+                                    }
+                            
+                                    // Format clock-in time
+                                    Time clockinTime = r.getTime("clockin");
+                                    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+                                    String formattedClockin = "";
+                                    if (clockinTime != null) {
+                                        formattedClockin = timeFormat.format(clockinTime);
+                                    }
+
+                                    // Format clock-out time
+                                    Time clockoutTime = r.getTime("clockout");
+                                    String formattedClockout = "";
+                                    if (clockoutTime != null) {
+                                        formattedClockout = timeFormat.format(clockoutTime);
+                                    }
+                                    
+// Calculate duration if both clockinTime and clockoutTime are not null
+                                    String duration = "-";
+                                    if (clockinTime != null && clockoutTime != null) {
+                                        // Calculate duration in milliseconds
+                                        long durationMillis = clockoutTime.getTime() - clockinTime.getTime();
+
+                                        // Convert milliseconds to hours and minutes
+                                        long hours = durationMillis / (60 * 60 * 1000);
+                                        long minutes = (durationMillis / (60 * 1000)) % 60;
+
+                                        // Format duration
+                                        duration = hours + "h " + minutes + "m";
+                                }
+                            
+                                %>
+                                <tr>
+                                    <td><%= formattedDate %></td>
+                                    <td><%= r.getString("day") %></td>
+                                    <td><%= formattedClockin %></td>
+                                    <td><%= formattedClockout %></td>
+                                    <td><%= duration %></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+
+                        <div class="summary">
+                            <p>Total Days Worked: <%= totalDays %></p>
+                            <p>Total Hours Worked: <%= totalHours %></p>
+                        </div>
+
+                        <div class="additional-stats">
+                            <p>Average Hours per Day: <%= totalDays != 0 ? totalHours / totalDays : 0 %></p>
+                            <p>Maximum Hours Worked in a Day: <%= maxHoursInDay %></p>
+                        </div>
+
+                        <%
+                            r.close();
+                            ps.close();
+                            c.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            out.println("<p>Error occurred while retrieving attendance details: " + e.getMessage() + "</p>"); 
+                        }
+                        %>
+
+
+<!--                        <h2>helo <%= uid %></h2>
+                        <hr>-->
+                    </div>
+                </div>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
+            </main>
+
+
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

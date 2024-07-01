@@ -5,47 +5,69 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Manager Nav Bar</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <jsp:include page="bootstrap.jsp"/>
-        <% String fname= (String) session.getAttribute("firstName"); %>
-    </head>
-    <body>
+<% String fname = (String) session.getAttribute("firstName"); %>
+<style>
+    .sidebar-list-item.active {
+        background-color: #666666;
+        color: #ffffff !important;
+    }
+</style>
 
-        
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <!-- Add a Navbar Brand -->
-            <h3 style="color: white"><a href="userDetails.jsp" style="color: white">Staff</a>, <%= fname %></h3>
-            <!-- Add a Navbar Toggler   -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<aside id="sidebar">
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto"> <!-- Change to ml-auto for right alignment on larger screens -->
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("managerDashboard.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="staffDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("attendancesListStaff.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="attendancesListStaff.jsp">Attendances <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="loginPage.jsp">Log Out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <div class="sidebar-title">
+        <div class="sidebar-brand">
+            <a href="userDetails.jsp" style="color: #999999; text-decoration: none;">
+                <span class="material-icons-outlined">person</span> Staff</a>, <%= fname %>
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+    </div>
+    <ul class="sidebar-list">
+        <a id="dashboard-link" href="staffDashboard.jsp" style="color: #999999; text-decoration: none;"> 
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">dashboard</span> Dashboard
+            </li>
+        </a>
+
+        <a id="logout-link" href="logoutPage.jsp" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">logout</span> Log Out
+            </li>
+        </a>
+    </ul>
 
 
-        <!-- Bootstrap JavaScript and jQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="bootstrap/js/bootstrap.min.js"></script>
-    </body>
-</html>
+</aside>
+
+<script>
+    // Function to get the current page with query parameters
+    function getCurrentPage() {
+        var pathname = window.location.pathname.split("/").pop();
+        var search = window.location.search;
+        return pathname + search;
+    }
+
+    // Map the current page with query parameters to the corresponding sidebar link ID
+    var pageToLinkId = {
+        "dashboard-link": ["staffDashboard.jsp", "attendancesListStaff.jsp"]
+    };
+
+    // Get the current page with query parameters
+    var currentPage = getCurrentPage();
+
+    // Loop through the keys in the pageToLinkId object to find a match
+    for (var linkId in pageToLinkId) {
+        var urls = pageToLinkId[linkId];
+        for (var i = 0; i < urls.length; i++) {
+            if (currentPage.startsWith(urls[i])) {
+                var activeLink = document.getElementById(linkId);
+
+                if (activeLink) {
+                    activeLink.querySelector(".sidebar-list-item").classList.add("active");
+                }
+                break;
+            }
+        }
+    }
+</script>
 

@@ -16,6 +16,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
 
         <% String fname = (String) session.getAttribute("firstName"); %>
@@ -61,6 +62,7 @@
             ResultSet r = null;
             int totalprod = 0;
             double salesum = 0.0;
+            double sumexpense = 0.0;
             List<String> topProducts = new ArrayList<>();
             List<Integer> purchaseCounts = new ArrayList<>();
             
@@ -81,6 +83,13 @@
             r = s.executeQuery(sumcountsale);
             if(r.next()) {
             salesum = r.getDouble("sumsale");
+            }
+            
+            //count sum expenses
+            String sumcountexpense = "SELECT SUM(total) AS sumexpense FROM expenses";
+            r = s.executeQuery(sumcountexpense);
+            if(r.next()) {
+            sumexpense = r.getDouble("sumexpense");
             }
             
             // find 5 top products
@@ -136,7 +145,7 @@
                             <p class="text-primary">EXPENSES</p>
                             <span class="material-icons-outlined text-green">shopping_cart</span>
                         </div>
-                        <span class="text-primary font-weight-bold">79</span>
+                        <span class="text-primary font-weight-bold">RM<%= sumexpense %></span>
                     </div>
                 </div>
                     

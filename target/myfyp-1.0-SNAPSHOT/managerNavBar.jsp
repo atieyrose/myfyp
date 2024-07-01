@@ -63,7 +63,7 @@
             <span class="material-icons-outlined">inventory_2</span> Product
         </li>
     </a>
-    <a id="logout-link" href="loginPage.jsp" style="color: #999999; text-decoration: none;">
+    <a id="logout-link" href="logoutPage.jsp" style="color: #999999; text-decoration: none;">
         <li class="sidebar-list-item">
             <span class="material-icons-outlined">logout</span> Log Out
         </li>

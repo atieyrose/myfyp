@@ -10,6 +10,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Add New Customer</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
@@ -86,6 +87,76 @@
             .input-size {
                 width: 1000px; /* Adjust the width as needed */
             }
+            table.form-table {
+                width: 30%;
+                border-collapse: collapse;
+            }
+            table.form-table td {
+                width: 20%;
+                padding: 10px;
+                font-size: 1em;
+            }
+            table.form-table input,
+            table.form-table select,
+            table.form-table button {
+                width: 500%;
+                box-sizing: border-box;
+                font-size: 1em;
+                height: 30px;
+            }
+            /* Horizontal Pagination */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                list-style: none;
+                padding: 0;
+            }
+            .page-item {
+                margin: 0 5px;
+            }
+            .page-link {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            .page-link:hover {
+                background-color: #f1f1f1;
+                color: #333;
+            }
+            .page-item.active .page-link {
+                background-color: #333;
+                color: #fff;
+            }
+            .page-item.disabled .page-link {
+                color: #ddd;
+                pointer-events: none;
+            }
+            .enhanced-button {
+                display: inline-block;
+                padding: 15px 20px;
+                font-size: 15px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #fff;
+                background: #28a745;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+            .enhanced-button:hover {
+                background: #218838;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
         </style>
     </head>
     <body>
@@ -152,38 +223,40 @@
                                         <input type="hidden" name="custID" value="<c:out value='${customers.custID}'/>" />
                                     </c:if>
 
+                                    <table class="form-table">
+                                        <tr>
+                                            <td><label>First Name</label></td>
+                                            <td><input type="text" value="<c:out value='${customers.firstName}'/>" class="form-control input-size" name="firstName" placeholder="Enter First Name" required="required"></td>
+                                        </tr>
 
-                                    <fieldset class="form-group fieldset-spacing">
-                                        <label>First Name</label>
-                                        <input type="text" value="<c:out value='${customers.firstName}'/>" class="form-control input-size" name="firstName" required="required"><!-- comment -->
-                                    </fieldset>
+                                        <tr>
+                                            <td><label>Last Name</label></td>
+                                            <td><input type="text" value="<c:out value='${customers.lastName}'/>" class="form-control input-size" name="lastName" placeholder="Enter Last Name" required="required"></td>
+                                        </tr>
 
-                                    <fieldset class="form-group fieldset-spacing">
-                                        <label>Last Name</label>
-                                        <input type="text" value="<c:out value='${customers.lastName}'/>" class="form-control input-size" name="lastName" required="required"><!-- comment -->
-                                    </fieldset>
+                                        <tr>
+                                            <td><label>Phone Number</label></td>
+                                            <td><input type="text" value="<c:out value='${customers.phoneNo}'/>" class="form-control input-size" name="phoneNo" placeholder="Enter Phone Number" required="required"></td>
+                                        </tr>
 
-                                    <fieldset class="form-group fieldset-spacing">
-                                        <label>Phone Number</label>
-                                        <input type="text" value="<c:out value='${customers.phoneNo}'/>" class="form-control input-size" name="phoneNo" required="required"><!-- comment -->
-                                    </fieldset>
+                                        <tr>
+                                            <td><label>Email</label></td>
+                                            <td><input type="email" value="<c:out value='${customers.email}'/>" class="form-control input-size" name="email" placeholder="Enter Email" required="required"></td>
+                                        </tr>
 
-                                    <fieldset class="form-group fieldset-spacing">
-                                        <label>Email</label>
-                                        <input type="email" value="<c:out value='${customers.email}'/>" class="form-control input-size" name="email" required="required"><!-- comment -->
-                                    </fieldset>
+                                        <tr>
+                                            <td><label>Address</label></td>
+                                            <td><input type="text" value="<c:out value='${customers.address}'/>" class="form-control input-size" name="address" placeholder="Enter Address" required="required"></td>
+                                        </tr>
 
-                                    <fieldset class="form-group fieldset-spacing">
-                                        <label>Address</label>
-                                        <input type="text" value="<c:out value='${customers.address}'/>" class="form-control input-size" name="address" required="required"><!-- comment -->
-                                    </fieldset>
-
-
-                                    <button type="submit" class="btn btn-success">Save</button>
+                                    </table>
+                                    <button type="submit" class="enhanced-button">Save</button>
                                 </form>
+
                         </div>
                     </div>
                 </div>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
 
             <br>

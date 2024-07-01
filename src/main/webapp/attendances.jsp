@@ -19,6 +19,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Attendances</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
     </head>
     <body>
         <%

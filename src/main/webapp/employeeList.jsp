@@ -7,6 +7,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Employee List</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
         <% String fname = (String) session.getAttribute("firstName"); %>
         <!-- Montserrat Font -->
@@ -75,7 +76,7 @@
                     padding: 8px;
                 }
             }
-             .enhanced-button {
+            .enhanced-button {
                 display: inline-block;
                 padding: 15px 30px;
                 font-size: 16px;
@@ -100,80 +101,80 @@
     </head>
     <body>
         <div class="grid-container">
-           <!-- Header -->
+            <!-- Header -->
             <header class="header">
                 <h2>JERNIH TILING ENT</h2>
-                
+
             </header>
             <!-- End Header -->
 
             <!-- Sidebar -->
-            
+
             <!-- End Sidebar -->
             <%
         String role= (String) session.getAttribute("role");
-        %>
-             <% if ("manager".equals(role)) { %>
-    <jsp:include page="managerNavBar.jsp"/>
-    <% } else { %>
-    <jsp:include page="clerkNavBar.jsp"/>
-    <% } %>
+            %>
+            <% if ("manager".equals(role)) { %>
+            <jsp:include page="managerNavBar.jsp"/>
+            <% } else { %>
+            <jsp:include page="clerkNavBar.jsp"/>
+            <% } %>
 
             <!-- Main -->
             <main class="main-container">
-          
-                    <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
-                        Employee List
-                    </h2>
-                    <hr>
-                    
-                    <% 
-                if ("manager".equals(role) || "clerk".equals(role)) { 
+
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                    Employee List
+                </h2>
+                <hr>
+
+                <% 
+            if ("manager".equals(role) || "clerk".equals(role)) { 
                 %>
                 <button class="enhanced-button" onclick="window.location.href = 'employeeServlet?action=empnew'">Add New Employee</button>
                 <% } else { 
                 } %>
 
                 <br><br>
-                    <table class="table table-striped table-bordered">
-                        <thead class="thead-dark">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Card ID</th>
+                            <th>Role</th>
+                            <th>IC Number</th>
+                            <th>Date Of Birth</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="employee" items="${listemployee}">
                             <tr>
-                              
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Card ID</th>
-                                <th>Role</th>
-                                <th>IC Number</th>
-                                <th>Date Of Birth</th>
-                                <th>Phone Number</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>Action</th>
+
+                                <td><c:out value="${employee.firstName}" /></td>
+                                <td><c:out value="${employee.lastName}" /></td>
+                                <td><c:out value="${employee.cardID}" /></td>
+                                <td><c:out value="${employee.role}" /></td>
+                                <td><c:out value="${employee.icNo}" /></td>
+                                <td><c:out value="${employee.DOB}" /></td>
+                                <td><c:out value="${employee.phoneNo}" /></td>
+                                <td><c:out value="${employee.email}" /></td>
+                                <td><c:out value="${employee.address}" /></td>
+                                <td>
+                                    <button class="btn btn-warning" style="margin-bottom: 4px;"><a style="color: white" href="employeeServlet?action=empedit&ID=<c:out value='${employee.ID}' />" >Edit</a></button>
+                                    <button class="deleteButton btn btn-danger" style="margin-bottom: 4px;" data-employee-id="<c:out value='${employee.ID}' />">Delete</button>
+                                    <a class="btn btn-info" style="color: white;" href="attendancesStatistic.jsp?uid=<c:out value='${employee.cardID}' />">Attendances</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="employee" items="${listemployee}">
-                                <tr>
-                                    
-                                    <td><c:out value="${employee.firstName}" /></td>
-                                    <td><c:out value="${employee.lastName}" /></td>
-                                    <td><c:out value="${employee.cardID}" /></td>
-                                    <td><c:out value="${employee.role}" /></td>
-                                    <td><c:out value="${employee.icNo}" /></td>
-                                    <td><c:out value="${employee.DOB}" /></td>
-                                    <td><c:out value="${employee.phoneNo}" /></td>
-                                    <td><c:out value="${employee.email}" /></td>
-                                    <td><c:out value="${employee.address}" /></td>
-                                    <td>
-                                        <button class="btn btn-warning" style="margin-bottom: 4px;"><a style="color: white" href="employeeServlet?action=empedit&ID=<c:out value='${employee.ID}' />" >Edit</a></button>
-                                        <button class="deleteButton btn btn-danger" style="margin-bottom: 4px;" data-employee-id="<c:out value='${employee.ID}' />">Delete</button>
-                                        <a class="btn btn-info" style="color: white;" href="attendancesStatistic.jsp?uid=<c:out value='${employee.cardID}' />">Attendances</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                
+                        </c:forEach>
+                    </tbody>
+                </table>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
             <!-- End Main -->
         </div>

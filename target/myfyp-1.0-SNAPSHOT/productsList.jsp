@@ -16,6 +16,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Products List</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
 
         <% String fname = (String) session.getAttribute("firstName"); %>
@@ -24,11 +25,11 @@
         <!-- Material Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
         <!--        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">-->
-<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
         <!-- Custom Styles -->
         <link rel="stylesheet" href="css/styles.css">
-         <style>
+        <style>
             body {
                 font-family: 'Montserrat', sans-serif;
             }
@@ -88,7 +89,7 @@
                     padding: 8px;
                 }
             }
-                        .enhanced-button {
+            .enhanced-button {
                 display: inline-block;
                 padding: 15px 30px;
                 font-size: 16px;
@@ -116,91 +117,92 @@
             <!-- Header -->
             <header class="header">
                 <h2>JERNIH TILING ENT</h2>
-                
+
             </header>
             <!-- End Header -->
 
             <!-- Sidebar -->
             <%
         String role= (String) session.getAttribute("role");
-        %>
-             <% if ("manager".equals(role)) { %>
-    <jsp:include page="managerNavBar.jsp"/>
-    <% } else { %>
-    <jsp:include page="clerkNavBar.jsp"/>
-    <% } %>
+            %>
+            <% if ("manager".equals(role)) { %>
+            <jsp:include page="managerNavBar.jsp"/>
+            <% } else { %>
+            <jsp:include page="clerkNavBar.jsp"/>
+            <% } %>
             <!-- End Sidebar -->
 
             <!-- Main -->
             <main class="main-container">
-               <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
+                <h2 style="font-family: 'Arial', sans-serif; color: #333; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">
                     Products List
                 </h2>
-            <hr>
-            
-           <% 
-            if ("manager".equals(role) || "clerk".equals(role)) { 
-            %>
-            <button class="enhanced-button" onclick="window.location.href = 'productsServlet?action=prodnew'">Add New Product</button>
-            <% } else { 
+                <hr>
+
+                <% 
+                 if ("manager".equals(role) || "clerk".equals(role)) { 
+                %>
+                <button class="enhanced-button" onclick="window.location.href = 'productsServlet?action=prodnew'">Add New Product</button>
+                <% } else { 
                 } %>
-            <br><br>
-            
-               <table class="table table-striped table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        
-                        <th>Product Name</th>
-                        <th>Product Description</th>
-                        <th>Product Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="products" items="${listproducts}">
+                <br><br>
+
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
                         <tr>
-                            
-                            <td><c:out value="${products.prodName}" /></td>
-                            <td><c:out value="${products.prodDesc}" /></td>
-                            <td><c:out value="${products.price}" /></td>
-                            <td>
-                                <button class="btn btn-warning" style="margin-bottom: 4px; height: 40px; width: 72px"><a style="color: white" href="productsServlet?action=prodedit&prodID=<c:out value='${products.prodID}' />" >Edit</a></button>
-                                <button class="deleteButton btn btn-danger" style="margin-bottom: 4px; height: 40px; width: 72px" data-products-id="<c:out value='${products.prodID}' />">Delete</button>
-                                <!--<a href="employeeServlet?action=empdelete&ID=<c:out value='${employee.ID}' />" class="btn btn-danger">Delete</a>-->
-                            </td>
+
+                            <th>Product Name</th>
+                            <th>Product Description</th>
+                            <th>Product Price</th>
+                            <th>Action</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="products" items="${listproducts}">
+                            <tr>
+
+                                <td><c:out value="${products.prodName}" /></td>
+                                <td><c:out value="${products.prodDesc}" /></td>
+                                <td><c:out value="${products.price}" /></td>
+                                <td>
+                                    <button class="btn btn-warning" style="margin-bottom: 4px; height: 40px; width: 72px"><a style="color: white" href="productsServlet?action=prodedit&prodID=<c:out value='${products.prodID}' />" >Edit</a></button>
+                                    <button class="deleteButton btn btn-danger" style="margin-bottom: 4px; height: 40px; width: 72px" data-products-id="<c:out value='${products.prodID}' />">Delete</button>
+                                    <!--<a href="employeeServlet?action=empdelete&ID=<c:out value='${employee.ID}' />" class="btn btn-danger">Delete</a>-->
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                 <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
-  
-   
-    <br>
- 
-
-    <script>
-// Function to show a confirmation message when a Delete button is clicked
-        document.querySelectorAll(".deleteButton").forEach(function (button) {
-            button.addEventListener("click", function () {
-                var prodID = this.getAttribute("data-products-id");
-
-                // Use the built-in `confirm` dialog
-                var confirmation = confirm("Are you sure you want to delete this item?");
-
-                // Check if the user clicked "OK" in the confirmation dialog
-                if (confirmation) {
-                    // If "OK" is clicked, navigate to the specified link with the employeeID
-                    window.location.href = "productsServlet?action=proddelete&prodID=" + prodID;
-                } else {
-                    // Cancelled, no action needed
-                    alert("Delete operation cancelled.");
-                }
-            });
-        });
-    </script>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/scripts.js"></script>
+            <br>
+
+
+            <script>
+        // Function to show a confirmation message when a Delete button is clicked
+                document.querySelectorAll(".deleteButton").forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        var prodID = this.getAttribute("data-products-id");
+
+                        // Use the built-in `confirm` dialog
+                        var confirmation = confirm("Are you sure you want to delete this item?");
+
+                        // Check if the user clicked "OK" in the confirmation dialog
+                        if (confirmation) {
+                            // If "OK" is clicked, navigate to the specified link with the employeeID
+                            window.location.href = "productsServlet?action=proddelete&prodID=" + prodID;
+                        } else {
+                            // Cancelled, no action needed
+                            alert("Delete operation cancelled.");
+                        }
+                    });
+                });
+            </script>
+
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="js/scripts.js"></script>
     </body>
 </html>

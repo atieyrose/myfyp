@@ -5,64 +5,106 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Manager Nav Bar</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <jsp:include page="bootstrap.jsp"/>
-        <% String fname= (String) session.getAttribute("firstName"); %>
-    </head>
-    <body>
+<% String fname = (String) session.getAttribute("firstName"); %>
+<style>
+    .sidebar-list-item.active {
+        background-color: #666666;
+        color: #ffffff !important;
+    }
+</style>
 
-        
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <!-- Add a Navbar Brand -->
-            <h3 style="color: white"><a href="userDetails.jsp" style="color: white">Clerk</a>, <%= fname %></h3>
-            <!-- Add a Navbar Toggler   -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<aside id="sidebar">
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto"> <!-- Change to ml-auto for right alignment on larger screens -->
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("clerkDashboard.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="clerkDashboard.jsp">Dashboard <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("attendancesListStaff.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="attendancesListStaff.jsp">Attendances <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("customersServlet?action=custlist")) ? "active" : "" %>">
-                        <a class="nav-link" href="customersServlet?action=custlist">Customers <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("salesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="salesList.jsp">Sales <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("suppliersServlet?action=suplist")) ? "active" : "" %>">
-                        <a class="nav-link" href="suppliersServlet?action=suplist">Suppliers <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("expensesList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="expensesList.jsp">Expenses <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("productsList.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="productsList.jsp">Products <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item <%= (request.getRequestURI().endsWith("inventory.jsp")) ? "active" : "" %>">
-                        <a class="nav-link" href="inventory.jsp">Inventory <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="loginPage.jsp">Log Out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <div class="sidebar-title">
+        <div class="sidebar-brand">
+            <a href="userDetails.jsp" style="color: #999999; text-decoration: none;">
+                <span class="material-icons-outlined">person</span> Clerk</a>, <%= fname %>
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+    </div>
+    <ul class="sidebar-list">
+        <a id="dashboard-link" href="clerkDashboard.jsp" style="color: #999999; text-decoration: none;"> 
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">dashboard</span> Dashboard
+            </li>
+        </a>
+        <a id="attendances-link" href="attendancesListStaff.jsp" style="color: #999999; text-decoration: none;">
+        <li class="sidebar-list-item">
+            <span class="material-icons-outlined">calendar_month</span> Attendances
+        </li>
+    </a>
+        <a id="customers-link" href="customersServlet?action=custlist" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">groups</span> Customers
+            </li>
+        </a>
+        <a id="sales-link" href="processSales.jsp" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">shopping_bag</span> Sales
+            </li>
+        </a>
+        <a id="suppliers-link" href="suppliersServlet?action=suplist" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">groups</span> Suppliers
+            </li>
+        </a>
+        <a id="expenses-link" href="expensesList.jsp" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">shopping_cart</span> Expenses
+            </li>
+        </a>
+        <a id="product-link" href="productsServlet?action=prodlist" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">inventory_2</span> Product
+            </li>
+        </a>
+        <a id="logout-link" href="logoutPage.jsp" style="color: #999999; text-decoration: none;">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">logout</span> Log Out
+            </li>
+        </a>
+    </ul>
 
 
-        <!-- Bootstrap JavaScript and jQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="bootstrap/js/bootstrap.min.js"></script>
-    </body>
-</html>
+</aside>
+
+<script>
+    // Function to get the current page with query parameters
+    function getCurrentPage() {
+        var pathname = window.location.pathname.split("/").pop();
+        var search = window.location.search;
+        return pathname + search;
+    }
+
+    // Map the current page with query parameters to the corresponding sidebar link ID
+    var pageToLinkId = {
+        "dashboard-link": ["clerkDashboard.jsp"],
+        "employee-link": ["employeeServlet?action=emplist", "employeeServlet?action=empnew", "employeeServlet?action=empedit"],
+        "attendances-link": ["attendancesListStaff.jsp"],
+        "customers-link": ["customersServlet?action=custlist", "customersServlet?action=custnew", "customersServlet?action=custedit"],
+        "sales-link": ["processSales.jsp", "sales.jsp", "salesDetails.jsp"],
+        "suppliers-link": ["suppliersServlet?action=suplist", "suppliersServlet?action=supnew", "suppliersServlet?action=supedit"],
+        "expenses-link": ["expensesList.jsp", "expenses.jsp", "expenseDetails.jsp"],
+        "product-link": ["productsServlet?action=prodlist", "productsServlet?action=prodnew", "productsServlet?action=prodedit"],
+        "logout-link": ["loginPage.jsp"]
+    };
+
+    // Get the current page with query parameters
+    var currentPage = getCurrentPage();
+
+    // Loop through the keys in the pageToLinkId object to find a match
+    for (var linkId in pageToLinkId) {
+        var urls = pageToLinkId[linkId];
+        for (var i = 0; i < urls.length; i++) {
+            if (currentPage.startsWith(urls[i])) {
+                var activeLink = document.getElementById(linkId);
+
+                if (activeLink) {
+                    activeLink.querySelector(".sidebar-list-item").classList.add("active");
+                }
+                break;
+            }
+        }
+    }
+</script>
+

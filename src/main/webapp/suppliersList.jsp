@@ -16,6 +16,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Suppliers List</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
 
         <% String fname = (String) session.getAttribute("firstName"); %>
@@ -172,6 +173,7 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
         </div>
 

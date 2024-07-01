@@ -8,13 +8,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import= "java.text.ParseException" %>
+<%@ page import= "java.util.Date" %>
 <%@page session="true" %>
 <!DOCTYPE html>
 <html lang="en">
+    <!--    <meta http-equiv="refresh" content="10;url=attendancesList.jsp" />-->
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Attendances List</title>
+        <link rel="icon" href="images/Jernih.png" type="image/x-icon">
         <!-- Bootstrap CSS -->
 
         <% String fname = (String) session.getAttribute("firstName"); %>
@@ -102,37 +106,37 @@
                 box-sizing: border-box;
             }
             /* Horizontal Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-        }
-        .page-item {
-            margin: 0 5px;
-        }
-        .page-link {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .page-link:hover {
-            background-color: #f1f1f1;
-            color: #333;
-        }
-        .page-item.active .page-link {
-            background-color: #333;
-            color: #fff;
-        }
-        .page-item.disabled .page-link {
-            color: #ddd;
-            pointer-events: none;
-        }
+            .pagination {
+                display: flex;
+                justify-content: center;
+                list-style: none;
+                padding: 0;
+            }
+            .page-item {
+                margin: 0 5px;
+            }
+            .page-link {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            .page-link:hover {
+                background-color: #f1f1f1;
+                color: #333;
+            }
+            .page-item.active .page-link {
+                background-color: #333;
+                color: #fff;
+            }
+            .page-item.disabled .page-link {
+                color: #ddd;
+                pointer-events: none;
+            }
         </style>
     </head>
     <body>
@@ -181,37 +185,36 @@
                         p = c.prepareStatement(emp);
                         r = p.executeQuery();
                 %>
-                <form method="GET" action="attendancesList.jsp">
-                    <table class="form-table">
-                        <tr>
-                            <td><label for="emp" style="font-size: 1em;">Select an employee:</label></td>
-                            <td>
-                                <select name="selectedEmployee" id="selectedEmployee" style="font-size: 1em; height: 30px;">
-                                    <option value="">--Select employee--</option>
-                                    <% while (r.next()) { %>
-                                    <option value="<%= r.getString("cardID")%>">
-                                        <%= r.getString("firstName") %>
-                                    </option>
-                                    <% } %>
-                                </select>
-                            </td>
-                            <td><button type="submit" style="font-size: 1em; padding: 10px;">Show Attendances</button></td>
-                        </tr>
-                    </table>
-                </form>
-                                
-                <!-- Add a date picker input field -->
-                <form method="GET" action="attendancesList.jsp">
-                    <table class="form-table">
-                        <tr>
-                            <td><label for="datepicker" style="font-size: 1em;">Choose a date:</label></td>
-                            <td>
-                                <input type="date" id="datepicker" name="selectedDate" value="<%= request.getParameter("selectedDate") %>" style="font-size: 1em; height: 30px;">
-                            </td>
-                            <td><button type="submit" style="font-size: 1em; padding: 10px;">Show Attendances</button></td>
-                        </tr>
-                    </table>
-                </form>
+<!--                                <form method="GET" action="attendancesList.jsp">
+                                    <table class="form-table">
+                                        <tr>
+                                            <td><label for="emp" style="font-size: 1em;">Select an employee:</label></td>
+                                            <td>
+                                                <select name="selectedEmployee" id="selectedEmployee" style="font-size: 1em; height: 30px;">
+                                                    <option value="">--Select employee--</option>
+                <% while (r.next()) { %>
+                <option value="<%= r.getString("cardID")%>">
+                <%= r.getString("firstName") %>
+            </option>
+                <% } %>
+            </select>
+        </td>
+        <td><button type="submit" style="font-size: 1em; padding: 10px;">Show Attendances</button></td>
+    </tr>
+</table>
+</form>-->
+
+<form method="GET" action="attendancesList.jsp">
+<table class="form-table">
+    <tr>
+        <td><label for="datepicker" style="font-size: 1em;">Choose a date:</label></td>
+        <td>
+            <input type="date" id="datepicker" name="selectedDate" value="<%= request.getParameter("selectedDate") %>" style="font-size: 1em; height: 30px;">
+        </td>
+        <td><button type="submit" style="font-size: 1em; padding: 10px;">Show Attendances</button></td>
+    </tr>
+</table>
+</form>
 
 
                 <%
@@ -293,9 +296,19 @@
                         p.setInt(3, rowsPerPage);
 
                         r = p.executeQuery();
+                        
+                        // Define the original format
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Define the new format
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yyyy");
+        
+         Date date = originalFormat.parse(selectedDate);
+         // Format the Date object to the new format
+            String newDateStr = newFormat.format(date);
                 %>
 
-                <h2>Date: <%= selectedDate %> </h2>
+                <h2>Date: <%= newDateStr %> </h2>
                 <div class="center-table">
                     <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
@@ -341,10 +354,19 @@
                                         formattedClockout = timeFormat.format(clockoutTime);
                                     }
 
-                                    String duration = r.getString("duration");
-                                    if (duration == null) {
-                                        duration = "-";
-                                    }
+                                    // Calculate duration if both clockinTime and clockoutTime are not null
+                                    String duration = "-";
+                                    if (clockinTime != null && clockoutTime != null) {
+                                        // Calculate duration in milliseconds
+                                        long durationMillis = clockoutTime.getTime() - clockinTime.getTime();
+
+                                        // Convert milliseconds to hours and minutes
+                                        long hours = durationMillis / (60 * 60 * 1000);
+                                        long minutes = (durationMillis / (60 * 1000)) % 60;
+
+                                        // Format duration
+                                        duration = hours + "h " + minutes + "m";
+                                }
                             %>
                             <tr>
                                 <td><%= employeeID %></td>
@@ -414,6 +436,7 @@
                     }
                 %>
 
+                 <p>&copy; 2023 Jernih Group Ent. All rights reserved.</p>
             </main>
             <!-- End Main -->
         </div>
